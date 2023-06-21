@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "534980132039",
+    "project_id": "instagram-clone-f466a",
+    "storage_bucket": "instagram-clone-f466a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:534980132039:android:f27b430ef8a64b4f2bd2e2",
+        "android_client_info": {
+          "package_name": "udemy.java.instagram_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "534980132039-qqrkvo38dr2ijd2u3lna3ejtgle1jkms.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "udemy.java.instagram_clone",
+            "certificate_hash": "305c44d034cb1a5128198d4f529787513dbab6db"
+          }
+        },
+        {
+          "client_id": "534980132039-koe3mqfu7br9dkfno2sc32gk3ev5uurf.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA8jr4M4UahKkEhQF-HPEzK4fHuzKJgnM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "534980132039-koe3mqfu7br9dkfno2sc32gk3ev5uurf.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
