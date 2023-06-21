@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Instagram-clone</string>
+    <string name="criar_conta">Criar conta</string>
+    <string name="palavra_pass">Palavra pass</string>
+    <string name="email">Email</string>
+    <string name="nome">Nome</string>
+    <string name="entrar">Entrar</string>
 </resources>

@@ -3,5 +3,8 @@
     <style name="Base.Theme.Instagramclone" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your dark theme here. -->
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">#3F51B5</item>
+        <item name="colorPrimaryDark">#462759</item>
+        <item name="colorAccent">#9C27B0</item>
     </style>
 </resources>
