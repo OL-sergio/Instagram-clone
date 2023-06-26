@@ -17,12 +17,12 @@ public class User implements Serializable {
     public User() {
     }
 
-    public void saveUser(){
+    public void saveUser(User user){
         DatabaseReference databaseReference = FirebaseConfiguration.getDatabaseReference();
-        DatabaseReference user = databaseReference
+        DatabaseReference users = databaseReference
                 .child("Users")
                 .child(getuID());
-        user.setValue(this);
+        users.setValue(this);
     }
 
     @Exclude

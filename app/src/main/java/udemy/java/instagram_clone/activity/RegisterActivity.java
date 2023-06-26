@@ -8,16 +8,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Base64;
 
+import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.databinding.ActivityRegisterBinding;
 import udemy.java.instagram_clone.config.FirebaseConfiguration;
 import udemy.java.instagram_clone.helper.Base64Custom;
@@ -33,6 +38,7 @@ public class RegisterActivity extends AppCompatActivity {
     private EditText createName, createEmail, createPassword;
 
     private String textName, textEmail, textPassword;
+    private ProgressBar progressBar;
 
     private User user;
 
@@ -48,14 +54,20 @@ public class RegisterActivity extends AppCompatActivity {
         createEmail = binding.editTextRegisterEmail;
         createPassword = binding.editTextRegisterPassword;
         addUser = binding.buttonRegisterUser;
+        progressBar = binding.progressBarRegister;
+
+        progressBar.setVisibility(View.GONE);
 
         addUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+
+
                 textName = createName.getText().toString();
                 textEmail = createEmail.getText().toString();
                 textPassword = createPassword.getText().toString();
+
 
                 createUser();
             }
@@ -63,7 +75,6 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void createUser() {
-
         if (!textName.isEmpty()){
             if(!textEmail.isEmpty()){
                 if (!textPassword.isEmpty()){
@@ -73,22 +84,22 @@ public class RegisterActivity extends AppCompatActivity {
                     user.setEmail(textEmail);
                     user.setPassword(textPassword);
 
-                    registerUser();
+                    register(user);
 
                 }else {
-                    Toast.makeText(this, "Intreduza uma password", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RegisterActivity.this, R.string.intreduza_uma_password, Toast.LENGTH_SHORT).show();
                 }
             }else {
-                Toast.makeText(this, "Intreduza uma email", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterActivity.this, R.string.intreduza_uma_email, Toast.LENGTH_SHORT).show();
             }
 
         }else {
-            Toast.makeText(this, "Intreduza uma nome", Toast.LENGTH_SHORT).show();
+            Toast.makeText(RegisterActivity.this, R.string.intreduza_uma_nome, Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void registerUser() {
-
+    private void register(User user) {
+        progressBar.setVisibility(View.VISIBLE);
         userAuthentication = FirebaseConfiguration.getUserAuthentication();
         userAuthentication.createUserWithEmailAndPassword(
                 user.getEmail(),
@@ -97,26 +108,49 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Toast.makeText(RegisterActivity.this, "Sucesso a criar utilizador! ", Toast.LENGTH_SHORT).show();
+
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(getBaseContext(), R.string.sucesso_a_criar_conta, Toast.LENGTH_SHORT).show();
 
                     try {
 
                         String idUserIdentification = Base64Custom.encryption(user.getEmail());
                         user.setuID(idUserIdentification);
-                        user.saveUser();
+                        user.saveUser(user);
 
                     } catch (Exception exception){
                         exception.printStackTrace();
                     }
 
 
-                    //startActivity( new Intent(RegisterActivity.this, LoginActivity.class));
+                    startActivity( new Intent(RegisterActivity.this, MainActivity.class));
 
 
                 } else {
-
+                    progressBar.setVisibility(View.GONE);
+                    userValidation(task);
+                    
                 }
             }
         });
+    }
+
+    private void userValidation(Task<AuthResult> task) {
+
+            String exception;
+            try {
+                throw  task.getException();
+            } catch (FirebaseAuthWeakPasswordException e ) {
+                exception = getString(R.string.Intreduza_senha_mais_forte);
+            } catch (FirebaseAuthInvalidCredentialsException e ) {
+                exception = getString(R.string.Intreduza_email_valido);
+            } catch (FirebaseAuthUserCollisionException e ) {
+                exception = getString(R.string.Esta_conta_existe);
+            } catch (Exception e ){
+                exception = getString(R.string.Erro_criar_utilizador) + e.getMessage();
+                e.printStackTrace();
+            }
+            Toast.makeText(RegisterActivity.this, exception, Toast.LENGTH_SHORT).show();
+
     }
 }

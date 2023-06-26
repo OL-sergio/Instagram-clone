@@ -5,4 +5,13 @@
     <string name="email">Email</string>
     <string name="nome">Nome</string>
     <string name="entrar">Entrar</string>
+    <!-- Strings text -->
+    <string name="Intreduza_senha_mais_forte">Intreduza uma senha mais forte!</string>
+    <string name="Intreduza_email_valido">Intreduza um email valido!</string>
+    <string name="Esta_conta_existe">Esta conta já existe!</string>
+    <string name="Erro_criar_utilizador">"Erro ao criar utilizador: "</string>
+    <string name="intreduza_uma_password">Intreduza uma password</string>
+    <string name="intreduza_uma_email">Intreduza uma email</string>
+    <string name="intreduza_uma_nome">Intreduza uma nome</string>
+    <string name="sucesso_a_criar_conta">"Sucesso a criar conta! "</string>
 </resources>
