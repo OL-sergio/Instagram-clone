@@ -6,12 +6,16 @@
     <string name="nome">Nome</string>
     <string name="entrar">Entrar</string>
     <!-- Strings text -->
-    <string name="Intreduza_senha_mais_forte">Intreduza uma senha mais forte!</string>
-    <string name="Intreduza_email_valido">Intreduza um email valido!</string>
+    <string name="intreduza_senha_mais_forte">Intreduza uma senha mais forte!</string>
+    <string name="intreduza_email_valido">Intreduza um email valido!</string>
     <string name="Esta_conta_existe">Esta conta já existe!</string>
     <string name="Erro_criar_utilizador">"Erro ao criar utilizador: "</string>
     <string name="intreduza_uma_password">Intreduza uma password</string>
-    <string name="intreduza_uma_email">Intreduza uma email</string>
-    <string name="intreduza_uma_nome">Intreduza uma nome</string>
+    <string name="intreduza_uma_email">Intreduza um email</string>
+    <string name="intreduza_uma_nome">Intreduza um nome</string>
     <string name="sucesso_a_criar_conta">"Sucesso a criar conta! "</string>
+    <string name="essa_eamil_n_o_existe">Essa eamil não existe!</string>
+    <string name="erro_realizar_login">Algo correu mal tente outra vez e verifique ligação internet!</string>
+    <string name="intreduza_eamil_password_validos">Intreduza dados utilizador validos</string>
+    <string name="intreduza_utilizador_correcto">Intreduza dados do utilizador correctamente</string>
 </resources>

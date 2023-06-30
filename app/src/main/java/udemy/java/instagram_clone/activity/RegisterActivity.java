@@ -18,13 +18,11 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
-import com.google.firebase.auth.FirebaseUser;
-
-import java.util.Base64;
 
 import udemy.java.instagram_clone.R;
-import udemy.java.instagram_clone.databinding.ActivityRegisterBinding;
+
 import udemy.java.instagram_clone.config.FirebaseConfiguration;
+import udemy.java.instagram_clone.databinding.ActivityRegisterBinding;
 import udemy.java.instagram_clone.helper.Base64Custom;
 import udemy.java.instagram_clone.model.User;
 
@@ -50,11 +48,8 @@ public class RegisterActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        createName = binding.editTextRegisterName;
-        createEmail = binding.editTextRegisterEmail;
-        createPassword = binding.editTextRegisterPassword;
-        addUser = binding.buttonRegisterUser;
-        progressBar = binding.progressBarRegister;
+        startComponents();
+
 
         progressBar.setVisibility(View.GONE);
 
@@ -62,16 +57,23 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-
-
                 textName = createName.getText().toString();
                 textEmail = createEmail.getText().toString();
                 textPassword = createPassword.getText().toString();
 
-
                 createUser();
             }
         });
+    }
+
+    private void startComponents() {
+        createName = binding.editTextRegisterName;
+        createEmail = binding.editTextRegisterEmail;
+        createPassword = binding.editTextRegisterPassword;
+        addUser = binding.buttonRegisterUser;
+        progressBar = binding.progressBarRegister;
+
+        createName.requestFocus();
     }
 
     private void createUser() {
@@ -141,9 +143,9 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 throw  task.getException();
             } catch (FirebaseAuthWeakPasswordException e ) {
-                exception = getString(R.string.Intreduza_senha_mais_forte);
+                exception = getString(R.string.intreduza_senha_mais_forte);
             } catch (FirebaseAuthInvalidCredentialsException e ) {
-                exception = getString(R.string.Intreduza_email_valido);
+                exception = getString(R.string.intreduza_email_valido);
             } catch (FirebaseAuthUserCollisionException e ) {
                 exception = getString(R.string.Esta_conta_existe);
             } catch (Exception e ){
