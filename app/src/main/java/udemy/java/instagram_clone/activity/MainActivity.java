@@ -13,14 +13,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
-import com.google.android.material.badge.BadgeDrawable;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
-
-import java.lang.reflect.Field;
 
 import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.FirebaseConfiguration;
@@ -55,7 +50,8 @@ public class MainActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        toolbar = binding.toolbarMain.toolbarMain;
+
+        toolbar = binding.toolbar.toolbarMain;
         toolbar.setTitle("Instagram");
         setSupportActionBar(toolbar);
 
@@ -68,8 +64,6 @@ public class MainActivity extends AppCompatActivity {
         //btmNav.getMenu().setGroupCheckable(0, true, true);
         //btmNav.getMenu().findItem(R.id.home).setChecked(true);
         //btmNav.findViewById(R.id.home).setVisibility(View.GONE);
-
-
 
         bottomNavigation();
 

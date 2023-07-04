@@ -8,7 +8,7 @@
     tools:context=".activity.MainActivity">
 
     <include
-        android:id="@+id/toolbar_main"
+        android:id="@+id/toolbar"
         layout="@layout/toolbar_main" />
 
     <FrameLayout
