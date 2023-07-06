@@ -8,7 +8,7 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profile_image"
+        android:id="@+id/circleImageView_profileImage"
         android:layout_width="60dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
@@ -21,7 +21,7 @@
         app:layout_editor_absoluteY="16dp" />
 
     <ProgressBar
-        android:id="@+id/progressBar_account"
+        android:id="@+id/progressBar_accountProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
@@ -32,13 +32,13 @@
 
 
     <TextView
-        android:id="@+id/textView_publications"
+        android:id="@+id/textView_publicationsProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="8dp"
         android:text="Publicações"
-        android:textColor="@color/mediumGray"
+        android:textColor="@color/darkGray"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
@@ -51,19 +51,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/textView_publications"
-        app:layout_constraintEnd_toEndOf="@+id/textView_publications"
-        app:layout_constraintStart_toStartOf="@+id/textView_publications"
+        app:layout_constraintBottom_toTopOf="@+id/textView_publicationsProfile"
+        app:layout_constraintEnd_toEndOf="@+id/textView_publicationsProfile"
+        app:layout_constraintStart_toStartOf="@+id/textView_publicationsProfile"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_followers"
+        android:id="@+id/textView_followersProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="8dp"
         android:text="Seguidores"
-        android:textColor="@color/mediumGray"
+        android:textColor="@color/darkGray"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
@@ -76,19 +76,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/textView_followers"
-        app:layout_constraintEnd_toEndOf="@+id/textView_followers"
-        app:layout_constraintStart_toStartOf="@+id/textView_followers"
+        app:layout_constraintBottom_toTopOf="@+id/textView_followersProfile"
+        app:layout_constraintEnd_toEndOf="@+id/textView_followersProfile"
+        app:layout_constraintStart_toStartOf="@+id/textView_followersProfile"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView_following"
+        android:id="@+id/textView_followingProfile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="8dp"
         android:text="Seguindo"
-        android:textColor="@color/mediumGray"
+        android:textColor="@color/darkGray"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"
         app:layout_constraintEnd_toEndOf="parent"
@@ -101,26 +101,37 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="0"
-        app:layout_constraintBottom_toTopOf="@+id/textView_following"
-        app:layout_constraintEnd_toEndOf="@+id/textView_following"
-        app:layout_constraintStart_toStartOf="@+id/textView_following"
+        app:layout_constraintBottom_toTopOf="@+id/textView_followingProfile"
+        app:layout_constraintEnd_toEndOf="@+id/textView_followingProfile"
+        app:layout_constraintStart_toStartOf="@+id/textView_followingProfile"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/button_accountEdit"
-        android:layout_width="0dp"
+
+    <TextView
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:layout_width="wrap_content"
         android:layout_height="22dp"
-        android:padding="1dp"
         android:text="Editar Perfil"
-        android:textColor="@color/black"
-        android:textSize="10sp"
-        android:background="@drawable/ic_bg_account"
+        android:padding="1dp"
+        app:layout_constraintBottom_toBottomOf="@+id/button_accountEditProfile"
+        app:layout_constraintEnd_toEndOf="@+id/button_accountEditProfile"
+        app:layout_constraintStart_toStartOf="@+id/button_accountEditProfile"
+        app:layout_constraintTop_toTopOf="@+id/button_accountEditProfile" />
+
+    <ImageButton
+        android:id="@+id/button_accountEditProfile"
+        android:layout_width="0dp"
+        android:layout_height="24dp"
+        android:background="@drawable/ic_bg_button"
+        android:padding="2dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
-        app:layout_constraintTop_toTopOf="@+id/guideline7" />
+        app:layout_constraintTop_toTopOf="@+id/guideline7"
+        android:importantForAccessibility="no" />
 
     <GridView
+        android:id="@+id/gridView_profile"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -129,10 +140,8 @@
         android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/guideline" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline"
