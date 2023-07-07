@@ -41,7 +41,6 @@ public class AccountFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -62,8 +61,5 @@ public class AccountFragment extends Fragment {
                 startActivity(new Intent(getContext(), EditProfileActivity.class));
             }
         });
-
-
-
     }
 }

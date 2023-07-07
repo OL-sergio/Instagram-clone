@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import udemy.java.instagram_clone.model.User;
+
 public class UserFirebase {
     public static FirebaseUser getCurrentUser(){
         FirebaseAuth user = FirebaseConfiguration.getUserAuthentication();
@@ -37,4 +39,23 @@ public class UserFirebase {
             exception.printStackTrace();
         }
     }
+
+    public static User getLoggedUserData() {
+
+        FirebaseUser firebaseUser = getCurrentUser();
+
+        User user = new User();
+        user.setEmail(firebaseUser.getEmail());
+        user.setName(firebaseUser.getDisplayName());
+        user.setUID(firebaseUser.getUid());
+
+        if (firebaseUser.getPhotoUrl() == null){
+            user.setUrlPhoto("");
+        }else {
+            user.setUrlPhoto(firebaseUser.getPhotoUrl().toString());
+        }
+
+        return user;
+    }
+
 }

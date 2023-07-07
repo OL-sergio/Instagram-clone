@@ -130,11 +130,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                         Toast.makeText(getBaseContext(), R.string.sucesso_a_criar_conta, Toast.LENGTH_SHORT).show();
 
+                        startActivity( new Intent(RegisterActivity.this, MainActivity.class));
+
                     } catch (Exception exception){
                         exception.printStackTrace();
                     }
 
-                    startActivity( new Intent(RegisterActivity.this, MainActivity.class));
+
 
                 } else {
                     progressBar.setVisibility(View.GONE);

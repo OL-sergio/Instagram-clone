@@ -4,12 +4,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 import udemy.java.instagram_clone.config.FirebaseConfiguration;
 
 public class User implements Serializable {
 
-    private String UID;
+    private String uid;
     private String name;
     private String email;
     private String password;
@@ -21,19 +24,38 @@ public class User implements Serializable {
     public void saveUser(User user){
         DatabaseReference databaseReference = FirebaseConfiguration.getDatabaseReference();
         DatabaseReference users = databaseReference
-                .child("Users")
+                .child("users")
                 .child(getUID());
                 users.setValue(this);
     }
 
+    public void updateUSer(){
+        DatabaseReference firebaseReference = FirebaseConfiguration.getDatabaseReference();
+        DatabaseReference usersReference = firebaseReference
+                .child("users")
+                .child(getUID());
+        Map<String, Object> userValues = convertToMAp();
+        usersReference.updateChildren(userValues);
 
 
-    public String getUID() {
-        return UID;
     }
 
-    public void setUID(String UID) {
-        this.UID = UID;
+    public Map<String, Object > convertToMAp(){
+        HashMap<String, Object> userMap = new HashMap<>();
+        userMap.put("email", getEmail());
+        userMap.put("name", getName());
+        userMap.put("uid", getUID());
+        userMap.put("urlPhoto", getUrlPhoto());
+
+        return userMap;
+    }
+
+    public String getUID() {
+        return uid;
+    }
+
+    public void setUID(String uid) {
+        this.uid = uid;
     }
 
     public String getName() {
