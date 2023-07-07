@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseAuth;
 
 import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.FirebaseConfiguration;
+
 import udemy.java.instagram_clone.databinding.ActivityMainBinding;
 import udemy.java.instagram_clone.fragments.AccountFragment;
 import udemy.java.instagram_clone.fragments.HomeFragment;

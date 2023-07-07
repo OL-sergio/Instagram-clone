@@ -106,24 +106,15 @@
         app:layout_constraintStart_toStartOf="@+id/textView_followingProfile"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <TextView
-        style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="wrap_content"
-        android:layout_height="22dp"
-        android:text="Editar Perfil"
-        android:padding="1dp"
-        app:layout_constraintBottom_toBottomOf="@+id/button_accountEditProfile"
-        app:layout_constraintEnd_toEndOf="@+id/button_accountEditProfile"
-        app:layout_constraintStart_toStartOf="@+id/button_accountEditProfile"
-        app:layout_constraintTop_toTopOf="@+id/button_accountEditProfile" />
-
-    <ImageButton
+    <Button
         android:id="@+id/button_accountEditProfile"
         android:layout_width="0dp"
-        android:layout_height="24dp"
+        android:layout_height="28dp"
         android:background="@drawable/ic_bg_button"
-        android:padding="2dp"
+        style="@style/Widget.AppCompat.Button.Borderless"
+        android:text="Editar perfil"
+        android:textColor="@color/black"
+        android:padding="1dp"
         app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toStartOf="@+id/guideline6"
         app:layout_constraintStart_toStartOf="@+id/guideline2"
@@ -138,6 +129,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

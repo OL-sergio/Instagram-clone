@@ -19,11 +19,13 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 
+import java.util.Objects;
+
 import udemy.java.instagram_clone.R;
 
 import udemy.java.instagram_clone.config.FirebaseConfiguration;
+import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityRegisterBinding;
-import udemy.java.instagram_clone.helper.Base64Custom;
 import udemy.java.instagram_clone.model.User;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -101,7 +103,9 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void register(User user) {
+
         progressBar.setVisibility(View.VISIBLE);
+
         userAuthentication = FirebaseConfiguration.getUserAuthentication();
         userAuthentication.createUserWithEmailAndPassword(
                 user.getEmail(),
@@ -111,22 +115,26 @@ public class RegisterActivity extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
 
-                    progressBar.setVisibility(View.GONE);
-                    Toast.makeText(getBaseContext(), R.string.sucesso_a_criar_conta, Toast.LENGTH_SHORT).show();
-
                     try {
 
-                        String idUserIdentification = Base64Custom.encryption(user.getEmail());
-                        user.setuID(idUserIdentification);
+                        progressBar.setVisibility(View.GONE);
+
+
+                        //Saving user data on firebase
+                        String idUserIdentification = Objects.requireNonNull(task.getResult().getUser()).getUid();
+                        user.setUID(idUserIdentification);
                         user.saveUser(user);
+
+                        //Saving profile user data on firebase
+                        UserFirebase.updateUserName(user.getName());
+
+                        Toast.makeText(getBaseContext(), R.string.sucesso_a_criar_conta, Toast.LENGTH_SHORT).show();
 
                     } catch (Exception exception){
                         exception.printStackTrace();
                     }
 
-
                     startActivity( new Intent(RegisterActivity.this, MainActivity.class));
-
 
                 } else {
                     progressBar.setVisibility(View.GONE);

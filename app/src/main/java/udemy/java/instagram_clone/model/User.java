@@ -13,6 +13,7 @@ public class User implements Serializable {
     private String name;
     private String email;
     private String password;
+    private String urlPhoto;
 
     public User() {
     }
@@ -21,17 +22,18 @@ public class User implements Serializable {
         DatabaseReference databaseReference = FirebaseConfiguration.getDatabaseReference();
         DatabaseReference users = databaseReference
                 .child("Users")
-                .child(getuID());
-        users.setValue(this);
+                .child(getUID());
+                users.setValue(this);
     }
 
-    @Exclude
-    public String getuID() {
+
+
+    public String getUID() {
         return UID;
     }
 
-    public void setuID(String uID) {
-        this.UID = uID;
+    public void setUID(String UID) {
+        this.UID = UID;
     }
 
     public String getName() {
@@ -57,5 +59,13 @@ public class User implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public String getUrlPhoto() {
+        return urlPhoto;
+    }
+
+    public void setUrlPhoto(String urlPhoto) {
+        this.urlPhoto = urlPhoto;
     }
 }
