@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import java.util.Objects;
 
 import udemy.java.instagram_clone.R;
-import udemy.java.instagram_clone.config.FirebaseConfiguration;
+import udemy.java.instagram_clone.config.ConfigurationFirebase;
 
 import udemy.java.instagram_clone.databinding.ActivityLoginBinding;
 import udemy.java.instagram_clone.model.User;
@@ -114,7 +114,7 @@ public class LoginActivity extends AppCompatActivity {
     private void loginToAccount() {
         progressBar.setVisibility(View.VISIBLE);
 
-        userAuthentication = FirebaseConfiguration.getUserAuthentication();
+        userAuthentication = ConfigurationFirebase.getUserAuthentication();
         userAuthentication.signInWithEmailAndPassword(
                 user.getEmail(),
                 user.getPassword()
@@ -165,7 +165,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        FirebaseUser userLogged = FirebaseConfiguration.getUserAuthentication().getCurrentUser();
+        FirebaseUser userLogged = ConfigurationFirebase.getUserAuthentication().getCurrentUser();
         if(userLogged != null){
             goToApp();
         }

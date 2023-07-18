@@ -1,6 +1,9 @@
 package udemy.java.instagram_clone.fragments;
 
+import static udemy.java.instagram_clone.config.UserFirebase.getCurrentUser;
+
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,7 +17,11 @@ import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseUser;
+
 import de.hdodenhof.circleimageview.CircleImageView;
+import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.activity.EditProfileActivity;
 import udemy.java.instagram_clone.databinding.FragmentAccountBinding;
 
@@ -46,6 +53,44 @@ public class AccountFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
 
 
+        startComponents();
+
+        refreshProfileImage();
+
+    }
+
+    private void refreshProfileImage() {
+        //Recover data from user
+        FirebaseUser user = getCurrentUser();
+
+        Uri url = user.getPhotoUrl();
+
+        if (url != null ) {
+
+            Glide.with(AccountFragment.this)
+                    .asBitmap()
+                    .load(url)
+                    .into(circleImageViewProfileImage);
+
+        } else {
+
+            circleImageViewProfileImage.setImageResource(R.drawable.avatar);
+        }
+
+
+
+        buttonEditProfile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                startActivity(new Intent(getContext(), EditProfileActivity.class));
+
+                getActivity().getFragmentManager().popBackStackImmediate();
+            }
+        });
+    }
+
+    private void startComponents() {
         gridViewProfile = binding.gridViewProfile;
         progressBar = binding.progressBarAccountProfile;
         circleImageViewProfileImage = binding.circleImageViewProfileImage;
@@ -53,13 +98,23 @@ public class AccountFragment extends Fragment {
         textViewFollowers = binding.textViewFollowersProfile;
         textViewFollowing = binding.textViewFollowingProfile;
         buttonEditProfile = binding.buttonAccountEditProfile;
+    }
 
-        buttonEditProfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onStart() {
+        refreshProfileImage();
+        super.onStart();
+    }
 
-                startActivity(new Intent(getContext(), EditProfileActivity.class));
-            }
-        });
+    @Override
+    public void onResume() {
+        refreshProfileImage();
+        super.onResume();
+    }
+
+    @Override
+    public void onStop() {
+        binding = null;
+        super.onStop();
     }
 }

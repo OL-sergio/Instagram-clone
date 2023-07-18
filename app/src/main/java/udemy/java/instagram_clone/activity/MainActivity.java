@@ -18,7 +18,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 
 import udemy.java.instagram_clone.R;
-import udemy.java.instagram_clone.config.FirebaseConfiguration;
+import udemy.java.instagram_clone.config.ConfigurationFirebase;
 
 import udemy.java.instagram_clone.databinding.ActivityMainBinding;
 import udemy.java.instagram_clone.fragments.AccountFragment;
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
         toolbar.setTitle("Instagram");
         setSupportActionBar(toolbar);
 
-        firebaseAuth = FirebaseConfiguration.getUserAuthentication();
+        firebaseAuth = ConfigurationFirebase.getUserAuthentication();
 
         btmNav = binding.navigation.bottomNavigation;
         btmNav.setActivated(true);

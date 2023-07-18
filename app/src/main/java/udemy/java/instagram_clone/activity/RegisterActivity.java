@@ -23,7 +23,7 @@ import java.util.Objects;
 
 import udemy.java.instagram_clone.R;
 
-import udemy.java.instagram_clone.config.FirebaseConfiguration;
+import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityRegisterBinding;
 import udemy.java.instagram_clone.model.User;
@@ -106,7 +106,7 @@ public class RegisterActivity extends AppCompatActivity {
 
         progressBar.setVisibility(View.VISIBLE);
 
-        userAuthentication = FirebaseConfiguration.getUserAuthentication();
+        userAuthentication = ConfigurationFirebase.getUserAuthentication();
         userAuthentication.createUserWithEmailAndPassword(
                 user.getEmail(),
                 user.getPassword()

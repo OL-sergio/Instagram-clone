@@ -1,5 +1,6 @@
 package udemy.java.instagram_clone.config;
 
+import android.net.Uri;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -10,11 +11,25 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 
+import java.util.Objects;
+
+import udemy.java.instagram_clone.helper.Base64Custom;
 import udemy.java.instagram_clone.model.User;
 
 public class UserFirebase {
+
+    public static String getUserIdentification(){
+
+        FirebaseAuth userRef = ConfigurationFirebase.getUserAuthentication();
+        String email = Objects.requireNonNull(userRef.getCurrentUser()).getEmail();
+        assert email != null;
+        String userIdentification = Base64Custom.encryption(email);
+
+        return  userIdentification;
+    }
+
     public static FirebaseUser getCurrentUser(){
-        FirebaseAuth user = FirebaseConfiguration.getUserAuthentication();
+        FirebaseAuth user = ConfigurationFirebase.getUserAuthentication();
         return user.getCurrentUser();
     }
 
@@ -56,6 +71,45 @@ public class UserFirebase {
         }
 
         return user;
+    }
+
+    public static boolean updateUserPhoto(Uri url){
+        try {
+            FirebaseUser user = getCurrentUser();
+            UserProfileChangeRequest profile = new UserProfileChangeRequest
+                    .Builder()
+                    .setPhotoUri(url)
+                    .build();
+
+            user.updateProfile(profile).addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (!task.isSuccessful()){
+                        Log.d("perfil","Erro ao actualizar foto");
+                    }
+                }
+            });
+
+            return true;
+
+        }catch (Exception e){
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static User getCurrentUserData() {
+        FirebaseUser firebaseUser = getCurrentUser();
+        User userdata = new User();
+        userdata.setEmail(firebaseUser.getEmail() );
+        userdata.setName(firebaseUser.getDisplayName() );
+
+        if (firebaseUser.getPhotoUrl() == null){
+            userdata.setUrlPhoto("");
+        } else {
+            userdata.setUrlPhoto(firebaseUser.getPhotoUrl().toString() );
+        }
+        return userdata;
     }
 
 }

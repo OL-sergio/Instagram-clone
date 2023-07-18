@@ -5,10 +5,10 @@ import com.google.firebase.database.Exclude;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
 
-import udemy.java.instagram_clone.config.FirebaseConfiguration;
+import udemy.java.instagram_clone.config.ConfigurationFirebase;
+import udemy.java.instagram_clone.config.UserFirebase;
 
 public class User implements Serializable {
 
@@ -22,18 +22,19 @@ public class User implements Serializable {
     }
 
     public void saveUser(User user){
-        DatabaseReference databaseReference = FirebaseConfiguration.getDatabaseReference();
+        DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
         DatabaseReference users = databaseReference
                 .child("users")
                 .child(getUID());
                 users.setValue(this);
     }
 
-    public void updateUSer(){
-        DatabaseReference firebaseReference = FirebaseConfiguration.getDatabaseReference();
+    public void updateUser(){
+        String userID = UserFirebase.getUserIdentification();
+        DatabaseReference firebaseReference = ConfigurationFirebase.getDatabaseReference();
         DatabaseReference usersReference = firebaseReference
                 .child("users")
-                .child(getUID());
+                .child(userID);
         Map<String, Object> userValues = convertToMAp();
         usersReference.updateChildren(userValues);
 
