@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
         if (bundle == null) {
             FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.viewPager, homeFragment).commit();
+            fragmentTransaction.replace(R.id.viewPager, searchFragment).commit();
         }
 
         btmNav.setOnItemSelectedListener(item -> {
