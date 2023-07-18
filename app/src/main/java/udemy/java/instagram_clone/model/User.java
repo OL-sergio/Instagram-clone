@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
-import udemy.java.instagram_clone.config.UserFirebase;
 
 public class User implements Serializable {
 
@@ -30,14 +29,13 @@ public class User implements Serializable {
     }
 
     public void updateUser(){
-        String userID = UserFirebase.getUserIdentification();
+
         DatabaseReference firebaseReference = ConfigurationFirebase.getDatabaseReference();
         DatabaseReference usersReference = firebaseReference
                 .child("users")
-                .child(userID);
+                .child(getUID());
         Map<String, Object> userValues = convertToMAp();
         usersReference.updateChildren(userValues);
-
 
     }
 

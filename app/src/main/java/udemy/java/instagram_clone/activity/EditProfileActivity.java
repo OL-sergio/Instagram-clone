@@ -1,8 +1,5 @@
 package udemy.java.instagram_clone.activity;
 
-import static udemy.java.instagram_clone.config.UserFirebase.getCurrentUser;
-import static udemy.java.instagram_clone.config.UserFirebase.updateUserPhoto;
-
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
@@ -58,10 +55,8 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextInputEditText textInputEditTextUpdateName, textInputEditTextUpdateEmail;
     private TextView textViewEditProfilePhoto;
     private Button buttonSaveUpdateUser;
-    private Toolbar toolbar;
 
     private StorageReference storageReference;
-    private User currentUser;
     private String userIdentification;
 
     private User userLogged;
@@ -79,7 +74,7 @@ public class EditProfileActivity extends AppCompatActivity {
         View view = binding.getRoot();
         setContentView(view);
 
-        toolbar = binding.toolbar.toolbarMain;
+        Toolbar toolbar = binding.toolbar.toolbarMain;
         toolbar.setTitle("Editar perfil");
         setSupportActionBar(toolbar);
 
@@ -102,22 +97,17 @@ public class EditProfileActivity extends AppCompatActivity {
 
         //Retrieved User
         userLogged = UserFirebase.getLoggedUserData();
-
         storageReference = ConfigurationFirebase.getFirebaseStorage();
         userIdentification = UserFirebase.getUserIdentification();
-        currentUser = UserFirebase.getCurrentUserData();
 
 
         //Retrieved user Profile
         FirebaseUser firebaseUser = UserFirebase.getCurrentUser();
-
         textInputEditTextUpdateName.setText(firebaseUser.getDisplayName());
         textInputEditTextUpdateEmail.setText(firebaseUser.getEmail());
 
         //Recover data from user
-        FirebaseUser user = getCurrentUser();
-
-        Uri url = user.getPhotoUrl();
+        Uri url = firebaseUser.getPhotoUrl();
 
         if (url != null ) {
 
@@ -239,8 +229,6 @@ public class EditProfileActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<Uri> task) {
                         Uri url = task.getResult();
                         updatePhotoUser(url);
-
-
                     }
                 });
             }
@@ -248,12 +236,12 @@ public class EditProfileActivity extends AppCompatActivity {
     }
 
     public void updatePhotoUser(Uri url) {
-        boolean userData = updateUserPhoto(url);
-        if( userData ){
-            currentUser.setUrlPhoto(url.toString());
-            currentUser.updateUser();
+
+        UserFirebase.updateUserPhoto(url);
+            userLogged.setUrlPhoto(url.toString());
+            userLogged.updateUser();
             Toast.makeText(this, "Foto actualizada", Toast.LENGTH_SHORT).show();
-        }
+
     }
 
     @Override

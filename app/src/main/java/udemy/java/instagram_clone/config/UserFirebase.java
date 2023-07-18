@@ -10,27 +10,17 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-
-import java.util.Objects;
-
-import udemy.java.instagram_clone.helper.Base64Custom;
 import udemy.java.instagram_clone.model.User;
 
 public class UserFirebase {
 
-    public static String getUserIdentification(){
-
-        FirebaseAuth userRef = ConfigurationFirebase.getUserAuthentication();
-        String email = Objects.requireNonNull(userRef.getCurrentUser()).getEmail();
-        assert email != null;
-        String userIdentification = Base64Custom.encryption(email);
-
-        return  userIdentification;
-    }
-
     public static FirebaseUser getCurrentUser(){
         FirebaseAuth user = ConfigurationFirebase.getUserAuthentication();
         return user.getCurrentUser();
+    }
+
+    public static String getUserIdentification() {
+        return getCurrentUser().getUid();
     }
 
     public static void  updateUserName(String name){
@@ -96,20 +86,6 @@ public class UserFirebase {
             e.printStackTrace();
             return false;
         }
-    }
-
-    public static User getCurrentUserData() {
-        FirebaseUser firebaseUser = getCurrentUser();
-        User userdata = new User();
-        userdata.setEmail(firebaseUser.getEmail() );
-        userdata.setName(firebaseUser.getDisplayName() );
-
-        if (firebaseUser.getPhotoUrl() == null){
-            userdata.setUrlPhoto("");
-        } else {
-            userdata.setUrlPhoto(firebaseUser.getPhotoUrl().toString() );
-        }
-        return userdata;
     }
 
 }
