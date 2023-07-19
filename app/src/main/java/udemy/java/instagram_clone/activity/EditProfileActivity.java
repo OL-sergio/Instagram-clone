@@ -85,15 +85,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         editProfilePhoto();
 
-        try {
-            if(buttonSaveUpdateUser.isContextClickable() || textViewEditProfilePhoto.isContextClickable() ){
-                editProfilePhoto();
-            }
-
-        } catch (Exception exception){
-            exception.printStackTrace();
-        }
-
 
         //Retrieved User
         userLogged = UserFirebase.getLoggedUserData();
@@ -124,7 +115,9 @@ public class EditProfileActivity extends AppCompatActivity {
         buttonSaveUpdateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameUpdated = Objects.requireNonNull(textInputEditTextUpdateName.getText()).toString();
+                String nameUpdated = textInputEditTextUpdateName.getText().toString();
+
+                UserFirebase.updateUserName(nameUpdated);
 
                 userLogged.setName(nameUpdated);
                 userLogged.updateUser();

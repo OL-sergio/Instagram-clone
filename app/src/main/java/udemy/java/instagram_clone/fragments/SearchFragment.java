@@ -1,5 +1,6 @@
 package udemy.java.instagram_clone.fragments;
 
+import android.app.DownloadManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,7 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.databinding.FragmentSearchBinding;
+import udemy.java.instagram_clone.model.User;
 
 
 public class SearchFragment extends Fragment {
@@ -23,6 +35,8 @@ public class SearchFragment extends Fragment {
     private SearchView searchForUsers;
     private RecyclerView recyclerViewSearchedUsers;
 
+    private List<User> userList;
+    private DatabaseReference usersReference;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -43,6 +57,10 @@ public class SearchFragment extends Fragment {
         searchForUsers = binding.searchViewSearchUsers;
         recyclerViewSearchedUsers = binding.recyclerViewSearchUsers;
 
+        userList = new ArrayList<>();
+        usersReference = ConfigurationFirebase.getDatabaseReference()
+                .child("users");
+
         searchForUsers.setQueryHint("Procurar por amigos");
         searchForUsers.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -55,13 +73,48 @@ public class SearchFragment extends Fragment {
             public boolean onQueryTextChange(String newText) {
                 //Log.d("onQueryTextChange", "intredução de texto " +  newText);
 
-
-
-
+                String textInput = newText.toUpperCase();
+                textSearchForUsers( textInput );
                 return true;
             }
         });
 
+
+    }
+
+    private void textSearchForUsers(String textSearch) {
+
+        userList.clear();
+
+        //Search for users case text on search
+        if (textSearch.length() > 0 ){
+
+            Query query = usersReference.orderByChild("name")
+                    .startAt(textSearch)
+                    .endAt(textSearch + "\uf8ff");
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+
+                        userList.add(dataSnapshot.getValue(User.class));
+
+                    }
+
+                    int totalUsers = userList.size();
+                    Log.i("dataSnapshot", "SearchForUsers: " +  totalUsers);
+
+
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+        }
 
     }
 }
