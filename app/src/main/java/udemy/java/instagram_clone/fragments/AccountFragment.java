@@ -32,7 +32,7 @@ public class AccountFragment extends Fragment {
     private CircleImageView circleImageViewProfileImage;
     private GridView gridViewProfile;
     private TextView textViewPublications, textViewFollowers, textViewFollowing;
-    private Button buttonEditProfile;
+    private Button buttonActionProfile;
 
     public AccountFragment() {
 
@@ -78,7 +78,7 @@ public class AccountFragment extends Fragment {
 
 
 
-        buttonEditProfile.setOnClickListener(new View.OnClickListener() {
+        buttonActionProfile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -96,7 +96,7 @@ public class AccountFragment extends Fragment {
         textViewPublications = binding.textViewNumberPublications;
         textViewFollowers = binding.textViewFollowersProfile;
         textViewFollowing = binding.textViewFollowingProfile;
-        buttonEditProfile = binding.buttonAccountEditProfile;
+        buttonActionProfile = binding.buttonAccountActionProfile;
     }
 
     @Override

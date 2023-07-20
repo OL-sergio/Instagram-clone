@@ -107,7 +107,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_accountEditProfile"
+        android:id="@+id/button_accountActionProfile"
         android:layout_width="0dp"
         android:layout_height="28dp"
         android:background="@drawable/ic_bg_button"

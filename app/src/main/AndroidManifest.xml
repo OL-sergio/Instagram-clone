@@ -14,13 +14,16 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".activity.EditProfileActivity"
-            android:parentActivityName=".activity.MainActivity"
+            android:name=".activity.FriendsProfileActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.EditProfileActivity"
+            android:exported="false"
+            android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.RegisterActivity"
             android:exported="true"
-            android:theme="@style/AppThemeLogin"/>
+            android:theme="@style/AppThemeLogin" />
         <activity
             android:name=".activity.LoginActivity"
             android:exported="true"

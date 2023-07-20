@@ -1,16 +1,17 @@
 package udemy.java.instagram_clone.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,10 +22,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import udemy.java.instagram_clone.activity.FriendsProfileActivity;
 import udemy.java.instagram_clone.adapter.SearchAdapter;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
-
 import udemy.java.instagram_clone.databinding.FragmentSearchBinding;
+import udemy.java.instagram_clone.helper.RecyclerItemClickListener;
 import udemy.java.instagram_clone.model.User;
 
 
@@ -68,6 +70,33 @@ public class SearchFragment extends Fragment {
 
         searchAdapter = new SearchAdapter(userList, getActivity());
         recyclerViewSearchedUsers.setAdapter(searchAdapter);
+
+
+        recyclerViewSearchedUsers.addOnItemTouchListener(new RecyclerItemClickListener(
+                getActivity(),
+                recyclerViewSearchedUsers,
+                new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        User selectedUser = userList.get(position);
+                        Intent intent = new Intent(getActivity(), FriendsProfileActivity.class);
+                        intent.putExtra("selectedUser", selectedUser );
+                        startActivity(intent);
+
+                    }
+
+                    @Override
+                    public void onLongItemClick(View view, int position) {
+
+                    }
+
+                    @Override
+                    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    }
+                }
+        ));
 
 
         searchForUsers.setQueryHint("Procurar por amigos");
