@@ -16,9 +16,13 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String urlPhoto;
+    private int followers = 0;
+    private int follow = 0;
+    private int posts = 0;
 
     public User() {
     }
+
 
     public void saveUser(User user){
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
@@ -45,6 +49,9 @@ public class User implements Serializable {
         userMap.put("name", getName());
         userMap.put("uid", getUID());
         userMap.put("urlPhoto", getUrlPhoto());
+        userMap.put("followers", getFollowers());
+        userMap.put("follow", getFollow());
+        userMap.put("posts", getPosts());
 
         return userMap;
     }
@@ -88,5 +95,29 @@ public class User implements Serializable {
 
     public void setUrlPhoto(String urlPhoto) {
         this.urlPhoto = urlPhoto;
+    }
+
+    public int getFollowers() {
+        return followers;
+    }
+
+    public void setFollowers(int followers) {
+        this.followers = followers;
+    }
+
+    public int getFollow() {
+        return follow;
+    }
+
+    public void setFollow(int follow) {
+        this.follow = follow;
+    }
+
+    public int getPosts() {
+        return posts;
+    }
+
+    public void setPosts(int posts) {
+        this.posts = posts;
     }
 }
