@@ -103,11 +103,9 @@ public class EditProfileActivity extends AppCompatActivity {
             Glide.with(EditProfileActivity.this)
                     .asBitmap()
                     .load(url)
+                    .placeholder(R.drawable.avatar)
                     .into(circleImageViewPhotoProfile);
 
-        } else {
-
-            circleImageViewPhotoProfile.setImageResource(R.drawable.avatar);
         }
 
         buttonSaveUpdateUser.setOnClickListener(new View.OnClickListener() {

@@ -69,11 +69,9 @@ public class AccountFragment extends Fragment {
             Glide.with(AccountFragment.this)
                     .asBitmap()
                     .load(url)
+                    .placeholder(R.drawable.avatar)
                     .into(circleImageViewProfileImage);
 
-        } else {
-
-            circleImageViewProfileImage.setImageResource(R.drawable.avatar);
         }
 
 
