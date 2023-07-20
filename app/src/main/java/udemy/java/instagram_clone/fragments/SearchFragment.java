@@ -1,15 +1,13 @@
 package udemy.java.instagram_clone.fragments;
 
-import android.app.DownloadManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.PluralsRes;
 import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +21,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
+import udemy.java.instagram_clone.adapter.SearchAdapter;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
+
 import udemy.java.instagram_clone.databinding.FragmentSearchBinding;
 import udemy.java.instagram_clone.model.User;
 
@@ -37,6 +37,8 @@ public class SearchFragment extends Fragment {
 
     private List<User> userList;
     private DatabaseReference usersReference;
+
+    public SearchAdapter searchAdapter;
 
     public SearchFragment() {
         // Required empty public constructor
@@ -60,6 +62,13 @@ public class SearchFragment extends Fragment {
         userList = new ArrayList<>();
         usersReference = ConfigurationFirebase.getDatabaseReference()
                 .child("users");
+
+        recyclerViewSearchedUsers.setHasFixedSize(true);
+        recyclerViewSearchedUsers.setLayoutManager(new LinearLayoutManager( getActivity() ));
+
+        searchAdapter = new SearchAdapter(userList, getActivity());
+        recyclerViewSearchedUsers.setAdapter(searchAdapter);
+
 
         searchForUsers.setQueryHint("Procurar por amigos");
         searchForUsers.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -87,7 +96,7 @@ public class SearchFragment extends Fragment {
         userList.clear();
 
         //Search for users case text on search
-        if (textSearch.length() > 0 ){
+        if (textSearch.length() > 2 ){
 
             Query query = usersReference.orderByChild("name")
                     .startAt(textSearch)
@@ -96,16 +105,21 @@ public class SearchFragment extends Fragment {
             query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    userList.clear();
+
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()){
 
                         userList.add(dataSnapshot.getValue(User.class));
 
                     }
 
+                    searchAdapter.notifyDataSetChanged();
+                    /*
+                    *
                     int totalUsers = userList.size();
                     Log.i("dataSnapshot", "SearchForUsers: " +  totalUsers);
-
-
+                    */
                 }
 
                 @Override

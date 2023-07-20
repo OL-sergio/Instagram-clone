@@ -1,9 +1,5 @@
 package udemy.java.instagram_clone.activity;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,6 +8,9 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -25,7 +24,6 @@ import java.util.Objects;
 
 import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
-
 import udemy.java.instagram_clone.databinding.ActivityLoginBinding;
 import udemy.java.instagram_clone.model.User;
 
