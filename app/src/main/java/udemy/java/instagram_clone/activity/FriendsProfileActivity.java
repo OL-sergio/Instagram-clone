@@ -2,6 +2,7 @@ package udemy.java.instagram_clone.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -22,6 +23,7 @@ import java.util.Objects;
 import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
+import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityFriendsProfileBinding;
 import udemy.java.instagram_clone.model.User;
 
@@ -32,12 +34,17 @@ public class FriendsProfileActivity extends AppCompatActivity {
     private Button buttonActionProfile;
     private CircleImageView circleImageViewProfile;
 
+    private DatabaseReference firebaseReference;
     private DatabaseReference referenceUsers;
     private DatabaseReference referenceUserFriend;
+    private DatabaseReference referenceFollowers;
+
     private GridView gridViewProfile;
     private TextView textViewPublications, textViewFollowers, textViewFollow;
 
     private ValueEventListener valueEventListenerFriendProfile;
+
+    private String userLogged;
 
     private User userSelected;
 
@@ -57,9 +64,14 @@ public class FriendsProfileActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_24);
 
-        referenceUsers = ConfigurationFirebase.getDatabaseReference().child("users");
+        firebaseReference = ConfigurationFirebase.getDatabaseReference();
+        userLogged = UserFirebase.getUserIdentification();
+
+        referenceUsers = firebaseReference.child("users");
+        referenceFollowers = firebaseReference.child("followers");
 
         startComponents();
+
 
         //Get user selected
         Bundle bundle = getIntent().getExtras();
@@ -78,11 +90,62 @@ public class FriendsProfileActivity extends AppCompatActivity {
                         .load(url)
                         .placeholder(R.drawable.avatar)
                         .into(circleImageViewProfile);
-
             }
+        }
+
+        verificationUserFriendFollow();
+
+    }
+
+    private void activateButtonFollow( boolean followUser ) {
+
+        if (followUser) {
+
+            buttonActionProfile.setText( "Seguindo" );
+
+        }else {
+
+            buttonActionProfile.setText( "Seguir" );
 
         }
+
     }
+
+    private void verificationUserFriendFollow() {
+
+        DatabaseReference followReference = referenceFollowers
+                .child( userLogged )
+                .child( userSelected.getUID() );
+
+        followReference.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists() ){
+
+                            Log.i("FriendFollow", "Follow ");
+                            activateButtonFollow(true);
+
+                        }else {
+
+                            Log.i("FriendFollow", "Followers " );
+                            activateButtonFollow(false);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                }
+
+        );
+
+    }
+
+
+
 
     private void retrieveDataFromProfile() {
 
