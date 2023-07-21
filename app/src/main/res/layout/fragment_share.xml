@@ -1,16 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:paddingLeft="50dp"
+    android:paddingRight="50dp"
     tools:context=".fragments.ShareFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:textAlignment="center"
-        android:layout_gravity="center_vertical"
+    <Button
+        android:id="@+id/button_openGallery"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="share" />
+        android:textColor="@color/black"
+        android:text="Abrir Galeria"
+        />
 
-</FrameLayout>
+    <Button
+        android:id="@+id/button_openCamara"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="Abrir Câmara"
+        />
+
+</LinearLayout>

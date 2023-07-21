@@ -3,14 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.HomeFragment">
+    tools:context=".fragments.FeedFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:textAlignment="center"
-        android:layout_gravity="center_vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="home" />
+        android:layout_gravity="center_vertical"
+        android:text="feed"
+        android:textAlignment="center" />
 
 </FrameLayout>

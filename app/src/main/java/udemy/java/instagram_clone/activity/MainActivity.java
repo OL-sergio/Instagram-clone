@@ -21,7 +21,7 @@ import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.databinding.ActivityMainBinding;
 import udemy.java.instagram_clone.fragments.AccountFragment;
-import udemy.java.instagram_clone.fragments.HomeFragment;
+import udemy.java.instagram_clone.fragments.FeedFragment;
 import udemy.java.instagram_clone.fragments.SearchFragment;
 import udemy.java.instagram_clone.fragments.ShareFragment;
 
@@ -35,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView btmNav;
 
 
-    final Fragment homeFragment = new HomeFragment();
+    final Fragment feedFragment = new FeedFragment();
     final Fragment searchFragment = new SearchFragment();
     final Fragment shareFragment = new ShareFragment();
     final Fragment accountFragment = new AccountFragment();
@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             if (item.getItemId() == R.id.home) {
 
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.viewPager, homeFragment).commit();
+                fragmentTransaction.replace(R.id.viewPager, feedFragment).commit();
 
             } else if (item.getItemId() == R.id.search) {
 
