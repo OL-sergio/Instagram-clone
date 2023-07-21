@@ -54,10 +54,12 @@ public class EditProfileActivity extends AppCompatActivity {
     private TextView textViewEditProfilePhoto;
     private Button buttonSaveUpdateUser;
 
-    private StorageReference storageReference;
-    private String userIdentification;
-
     private User userLogged;
+
+    private StorageReference storageReference;
+
+    private String userLoggedId;
+
     private Bitmap image = null;
 
     public EditProfileActivity() {
@@ -87,7 +89,7 @@ public class EditProfileActivity extends AppCompatActivity {
         //Retrieved User
         userLogged = UserFirebase.getLoggedUserData();
         storageReference = ConfigurationFirebase.getFirebaseStorage();
-        userIdentification = UserFirebase.getUserIdentification();
+        userLoggedId = UserFirebase.getUserIdentification();
 
 
         //Retrieved user Profile
@@ -195,7 +197,7 @@ public class EditProfileActivity extends AppCompatActivity {
         final StorageReference imageRef = storageReference
                 .child("images")
                 .child("profile")
-                .child(userIdentification)
+                .child(userLoggedId)
                 //.child(userIdentification + ".jpeg");
                 .child("profile.jpeg");
 

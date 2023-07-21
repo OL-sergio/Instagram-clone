@@ -25,6 +25,7 @@ import java.util.List;
 import udemy.java.instagram_clone.activity.FriendsProfileActivity;
 import udemy.java.instagram_clone.adapter.SearchAdapter;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
+import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.FragmentSearchBinding;
 import udemy.java.instagram_clone.helper.RecyclerItemClickListener;
 import udemy.java.instagram_clone.model.User;
@@ -39,6 +40,8 @@ public class SearchFragment extends Fragment {
 
     private List<User> userList;
     private DatabaseReference usersReference;
+
+    private String userLoggedId;
 
     public SearchAdapter searchAdapter;
 
@@ -64,6 +67,8 @@ public class SearchFragment extends Fragment {
         userList = new ArrayList<>();
         usersReference = ConfigurationFirebase.getDatabaseReference()
                 .child("users");
+
+        userLoggedId = UserFirebase.getUserIdentification();
 
         recyclerViewSearchedUsers.setHasFixedSize(true);
         recyclerViewSearchedUsers.setLayoutManager(new LinearLayoutManager( getActivity() ));
@@ -139,7 +144,11 @@ public class SearchFragment extends Fragment {
 
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()){
 
-                        userList.add(dataSnapshot.getValue(User.class));
+                        User user = dataSnapshot.getValue(User.class);
+
+                        if( userLoggedId.equals( user.getUID() ))
+                            continue;
+                            userList.add(user);
 
                     }
 

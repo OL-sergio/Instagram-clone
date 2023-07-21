@@ -2,7 +2,6 @@ package udemy.java.instagram_clone.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -18,6 +17,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -34,19 +34,21 @@ public class FriendsProfileActivity extends AppCompatActivity {
     private Button buttonActionProfile;
     private CircleImageView circleImageViewProfile;
 
-    private DatabaseReference firebaseReference;
+    private DatabaseReference referenceFirebase;
     private DatabaseReference referenceUsers;
     private DatabaseReference referenceUserFriend;
     private DatabaseReference referenceFollowers;
+    private DatabaseReference referenceUserLogged;
 
     private GridView gridViewProfile;
     private TextView textViewPublications, textViewFollowers, textViewFollow;
 
     private ValueEventListener valueEventListenerFriendProfile;
 
-    private String userLogged;
+    private String userLoggedId;
 
     private User userSelected;
+    private User userLogged;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +66,11 @@ public class FriendsProfileActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_24);
 
-        firebaseReference = ConfigurationFirebase.getDatabaseReference();
-        userLogged = UserFirebase.getUserIdentification();
+        referenceFirebase = ConfigurationFirebase.getDatabaseReference();
+        userLoggedId = UserFirebase.getUserIdentification();
 
-        referenceUsers = firebaseReference.child("users");
-        referenceFollowers = firebaseReference.child("followers");
+        referenceUsers = referenceFirebase.child("users");
+        referenceFollowers = referenceFirebase.child("followers");
 
         startComponents();
 
@@ -93,9 +95,31 @@ public class FriendsProfileActivity extends AppCompatActivity {
             }
         }
 
-        verificationUserFriendFollow();
+
 
     }
+
+    private void retrievedCurrentUserLogged(){
+
+        referenceUserLogged = referenceUsers.child( userLoggedId );
+        referenceUserLogged.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        userLogged = snapshot.getValue(User.class);
+
+                        verificationUserFriendFollow();
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+    }
+
 
     private void activateButtonFollow( boolean followUser ) {
 
@@ -107,14 +131,59 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
             buttonActionProfile.setText( "Seguir" );
 
+            buttonActionProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    saveFollowers( userLogged, userSelected );
+
+                }
+            });
+
         }
+
+    }
+
+    private void saveFollowers( User loggUser, User userFriend ) {
+
+        HashMap<String, Object> friendsData = new HashMap<>();
+        friendsData.put( "name", userFriend.getName() );
+        friendsData.put( "urlPhoto", userFriend.getUrlPhoto() );
+
+        DatabaseReference followerReference = referenceFollowers
+                .child( loggUser.getUID() )
+                .child( userFriend.getUID() );
+        followerReference.setValue(friendsData);
+
+        buttonActionProfile.setText("Seguindo");
+        buttonActionProfile.setOnClickListener(null);
+
+
+        int follow = loggUser.getFollow() + 1;
+        HashMap<String, Object> followData = new HashMap<>();
+        followData.put( "follow", follow );
+
+        DatabaseReference userFollow = referenceUsers
+                .child(loggUser.getUID());
+        userFollow.updateChildren(followData);
+
+
+        int followers = userFriend.getFollowers() + 1;
+        HashMap<String, Object> followersData = new HashMap<>();
+        followersData.put( "followers", followers );
+
+        DatabaseReference userFollowers = referenceUsers
+                .child(userFriend.getUID());
+        userFollowers.updateChildren(followersData);
+
+
 
     }
 
     private void verificationUserFriendFollow() {
 
         DatabaseReference followReference = referenceFollowers
-                .child( userLogged )
+                .child( userLoggedId )
                 .child( userSelected.getUID() );
 
         followReference.addListenerForSingleValueEvent(
@@ -123,12 +192,12 @@ public class FriendsProfileActivity extends AppCompatActivity {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists() ){
 
-                            Log.i("FriendFollow", "Follow ");
+                            //Log.i("FriendFollow", "Follow ");
                             activateButtonFollow(true);
 
                         }else {
 
-                            Log.i("FriendFollow", "Followers " );
+                           //Log.i("FriendFollow", "Followers " );
                             activateButtonFollow(false);
 
                         }
@@ -143,9 +212,6 @@ public class FriendsProfileActivity extends AppCompatActivity {
         );
 
     }
-
-
-
 
     private void retrieveDataFromProfile() {
 
@@ -172,7 +238,6 @@ public class FriendsProfileActivity extends AppCompatActivity {
                     }
         });
 
-
     }
 
     private void startComponents() {
@@ -186,7 +251,7 @@ public class FriendsProfileActivity extends AppCompatActivity {
         circleImageViewProfile = binding.profileFragment.circleImageViewProfileImage;
 
         buttonActionProfile = binding.profileFragment.buttonAccountActionProfile;
-        buttonActionProfile.setText("Seguir");
+        buttonActionProfile.setText("Carregando");
 
     }
 
@@ -200,7 +265,11 @@ public class FriendsProfileActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+
         retrieveDataFromProfile();
+
+        retrievedCurrentUserLogged();
+
     }
 
     @Override
