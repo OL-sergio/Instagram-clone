@@ -51,10 +51,7 @@ public class AccountFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-
         startComponents();
-
-        refreshProfileImage();
 
     }
 
@@ -99,15 +96,10 @@ public class AccountFragment extends Fragment {
 
     @Override
     public void onStart() {
-        refreshProfileImage();
         super.onStart();
+        refreshProfileImage();
     }
 
-    @Override
-    public void onResume() {
-        refreshProfileImage();
-        super.onResume();
-    }
 
     @Override
     public void onStop() {
