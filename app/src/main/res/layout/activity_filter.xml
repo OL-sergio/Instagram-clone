@@ -1,20 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
     tools:context=".activity.FilterActivity">
-    
-    
-    <ImageView
-        android:id="@+id/imageView_selectedPhoto"
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="420dp"
-        android:background="@drawable/avatar"
-        android:scaleType="centerCrop"
-        android:importantForAccessibility="no" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar_main" />
 
+        <ImageView
+            android:id="@+id/imageView_selectedPhoto"
+            android:layout_width="match_parent"
+            android:layout_height="420dp"
+            android:background="@drawable/avatar"
+            android:importantForAccessibility="no"
+            android:scaleType="centerCrop" />
 
-</LinearLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            style="@style/Widget.App.TextInputLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/textInputEditText_filterDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Descrição" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerView_imageFilters"
+                android:layout_width="match_parent"
+                android:layout_height="110dp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+</ScrollView>
+

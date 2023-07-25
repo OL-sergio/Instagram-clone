@@ -101,9 +101,9 @@ public class ShareFragment extends Fragment {
                          ContentResolver contentResolver = requireActivity().getContentResolver();
                          image = MediaStore.Images.Media.getBitmap( contentResolver, url);
 
-                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                         image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
-                         byte [] dataImage = baos.toByteArray();
+                         ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
+                         image.compress(Bitmap.CompressFormat.JPEG, 25, dataOutput);
+                         byte [] dataImage = dataOutput.toByteArray();
 
                           if (image != null){
 
@@ -131,7 +131,6 @@ public class ShareFragment extends Fragment {
                         Bundle photoData  = Objects.requireNonNull(result.getData()).getExtras();
                         image  = (Bitmap) photoData.get("data");
 
-
                         try {
 
                             assert result.getData() != null;
@@ -141,13 +140,9 @@ public class ShareFragment extends Fragment {
                             ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
                             image.compress(Bitmap.CompressFormat.JPEG, 100, dataOutput);
 
-
                             byte [] dataImage = dataOutput.toByteArray();
 
-
                             if (image != null){
-
-
 
                                 Intent intent = new Intent(getActivity(), FilterActivity.class );
                                 intent.putExtra("selectedPhoto", dataImage);
