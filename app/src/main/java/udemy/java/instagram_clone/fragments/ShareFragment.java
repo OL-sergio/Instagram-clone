@@ -2,6 +2,7 @@ package udemy.java.instagram_clone.fragments;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -21,6 +22,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
+import java.io.ByteArrayOutputStream;
+import java.util.Objects;
+
+import udemy.java.instagram_clone.activity.FilterActivity;
 import udemy.java.instagram_clone.databinding.FragmentShareBinding;
 import udemy.java.instagram_clone.helper.Permissions;
 
@@ -44,7 +49,7 @@ public class ShareFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         binding = FragmentShareBinding.inflate(getLayoutInflater());
@@ -88,25 +93,29 @@ public class ShareFragment extends Fragment {
 
                   if( result.getResultCode() == Activity.RESULT_OK) {
                         assert result.getData() != null;
-                        Uri url = result.getData().getData();
-                       /* try {
 
-                           //image = MediaStore.Images.Media.getBitmap(getContentResolver(), url);
+                      Uri url = result.getData().getData();
+
+                     try {
+
+                         ContentResolver contentResolver = requireActivity().getContentResolver();
+                         image = MediaStore.Images.Media.getBitmap( contentResolver, url);
+
+                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                         image.compress(Bitmap.CompressFormat.JPEG, 50, baos);
+                         byte [] dataImage = baos.toByteArray();
 
                           if (image != null){
 
-                                Glide.with(ShareFragment.this)
-                                        .asBitmap()
-                                        .load(image)
-                                        .into(circleImageViewPhotoProfile);
-
-                                //saveImageOnFirebase();
+                              Intent intent = new Intent(getActivity(), FilterActivity.class );
+                              intent.putExtra("selectedPhoto", dataImage);
+                              startActivity(intent);
 
                             }
 
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }*/
+                        } catch (Exception e) {
+                           e.printStackTrace();
+                        }
 
                     }
                 }
@@ -119,20 +128,36 @@ public class ShareFragment extends Fragment {
                 public void onActivityResult(ActivityResult result ) {
                     if( result.getResultCode() == Activity.RESULT_OK) {
 
-                        assert result.getData() != null;
-                        Bundle localImageSelection  = result.getData().getExtras();
-                        image  = (Bitmap) localImageSelection.get("data");
+                        Bundle photoData  = Objects.requireNonNull(result.getData()).getExtras();
+                        image  = (Bitmap) photoData.get("data");
 
-                       /**if (image != null){
 
-                            Glide.with(ConfigurationsActivity.this)
-                                    .asBitmap()
-                                    .load(image)
-                                    .into(circleImageViewSetImage);
+                        try {
 
-                            saveImageOnFirebase();
+                            assert result.getData() != null;
 
-                        }*/
+
+
+                            ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
+                            image.compress(Bitmap.CompressFormat.JPEG, 100, dataOutput);
+
+
+                            byte [] dataImage = dataOutput.toByteArray();
+
+
+                            if (image != null){
+
+
+
+                                Intent intent = new Intent(getActivity(), FilterActivity.class );
+                                intent.putExtra("selectedPhoto", dataImage);
+                                startActivity(intent);
+
+                            }
+
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             });
