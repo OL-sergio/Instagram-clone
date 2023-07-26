@@ -17,3 +17,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "Instagram-clone"
 include ':app'
+include ':benchmark'

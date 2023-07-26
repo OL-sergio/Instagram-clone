@@ -23,6 +23,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        benchmark {
+            signingConfig signingConfigs.debug
+            matchingFallbacks = ['release']
+            debuggable false
+        }
     }
 
     buildFeatures {
@@ -61,5 +66,7 @@ dependencies {
 
     implementation "androidx.cardview:cardview:1.0.0"
 
+    //https://github.com/Zomato/AndroidPhotoFilters
+    implementation 'com.github.zomato:androidphotofilters:1.0.2'
 
 }
