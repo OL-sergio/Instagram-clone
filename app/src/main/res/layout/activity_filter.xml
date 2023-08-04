@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <include
@@ -18,10 +18,11 @@
         <ImageView
             android:id="@+id/imageView_selectedPhoto"
             android:layout_width="match_parent"
-            android:layout_height="420dp"
-            android:background="@drawable/avatar"
+            android:layout_height="500dp"
             android:importantForAccessibility="no"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:scaleX="0.9"
+            android:scaleY="0.9" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -34,7 +35,7 @@
                 android:id="@+id/textInputEditText_filterDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Descrição" />
+                android:hint="@string/st_descri_o" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerView_imageFilters"

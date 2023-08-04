@@ -135,10 +135,8 @@ public class ShareFragment extends Fragment {
 
                             assert result.getData() != null;
 
-
-
                             ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
-                            image.compress(Bitmap.CompressFormat.JPEG, 100, dataOutput);
+                            image.compress(Bitmap.CompressFormat.JPEG, 60, dataOutput);
 
                             byte [] dataImage = dataOutput.toByteArray();
 

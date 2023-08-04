@@ -6,11 +6,11 @@ plugins {
 
 android {
     namespace 'udemy.java.instagram_clone'
-    compileSdk 33
+    compileSdk  33
 
     defaultConfig {
         applicationId "udemy.java.instagram_clone"
-        minSdk 24
+        minSdk 23
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -68,5 +68,4 @@ dependencies {
 
     //https://github.com/Zomato/AndroidPhotoFilters
     implementation 'com.github.zomato:androidphotofilters:1.0.2'
-
 }
