@@ -6,7 +6,6 @@
 
     <ImageView
         android:id="@+id/imageView_filters"
-        android:paddingTop="12dp"
         android:layout_width="@dimen/thumbnail_size"
         android:layout_height="@dimen/thumbnail_size"
         android:paddingLeft="@dimen/thumbnail_horizontal_padding"
