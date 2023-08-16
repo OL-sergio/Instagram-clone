@@ -90,7 +90,6 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
         listFilters = new ArrayList<>();
         idUserLogged = UserFirebase.getUserIdentification();
-        //imageFilter =  im.copy(imageData.getConfig(),true);
 
 
         imageViewSelectedPhoto = binding.imageViewSelectedPhoto;
@@ -267,10 +266,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
         byte[] imageData = bundle.getByteArray("selectedPhoto");
         image = BitmapFactory.decodeByteArray(imageData, 0, imageData.length  );
 
-
-
         if (bundle != null) {
-
 
             //byte[] imageData = baos.s("selectedPhoto");
 
@@ -348,6 +344,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         imageFilter.compress(Bitmap.CompressFormat.JPEG, 60, baos);
+
         byte[] imageData = baos.toByteArray();
 
         StorageReference storageRef = ConfigurationFirebase.getFirebaseStorage();
