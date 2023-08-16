@@ -112,7 +112,6 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
             if (image != null ){
 
-
                 imageViewSelectedPhoto.setImageBitmap(
                         Bitmap.createScaledBitmap(
                                image, 640, 640, false)
@@ -386,6 +385,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     @Override
     public boolean onSupportNavigateUp() {
         finish();
+        imageFilter = null;
         return false;
     }
 }

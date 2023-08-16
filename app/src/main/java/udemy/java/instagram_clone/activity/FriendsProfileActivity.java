@@ -2,6 +2,7 @@ package udemy.java.instagram_clone.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -17,7 +18,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -25,6 +28,7 @@ import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityFriendsProfileBinding;
+import udemy.java.instagram_clone.model.Posts;
 import udemy.java.instagram_clone.model.User;
 
 public class FriendsProfileActivity extends AppCompatActivity {
@@ -39,6 +43,7 @@ public class FriendsProfileActivity extends AppCompatActivity {
     private DatabaseReference referenceUserFriend;
     private DatabaseReference referenceFollowers;
     private DatabaseReference referenceUserLogged;
+    private DatabaseReference referencePostUsers;
 
     private GridView gridViewProfile;
     private TextView textViewPublications, textViewFollowers, textViewFollow;
@@ -81,6 +86,11 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
             userSelected = (User) bundle.getSerializable("selectedUser" );
 
+            //Configurar referencia postagens utilizador
+            referencePostUsers = ConfigurationFirebase.getDatabaseReference()
+                    .child("posts" )
+                    .child( userSelected.getUID() );
+
             getSupportActionBar().setTitle(userSelected.getName());
 
             String photoUrl = userSelected.getUrlPhoto();
@@ -96,6 +106,34 @@ public class FriendsProfileActivity extends AppCompatActivity {
         }
 
 
+        retrievingPhotosPosts();
+
+    }
+
+    private void retrievingPhotosPosts() {
+
+        referencePostUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                List<String> urlPhoto = new ArrayList<>();
+                for ( DataSnapshot ds: snapshot.getChildren()  ){
+                    Posts posts = ds.getValue(Posts.class);
+                    Log.d("post","urlPhoto" + posts.getPhotoUrl() );
+                    urlPhoto.add(posts.getPhotoUrl());
+
+                }
+
+                int totalPost = urlPhoto.size();
+                textViewPublications.setText( String.valueOf(totalPost) );
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
@@ -223,11 +261,11 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
                         User user = snapshot.getValue(User.class);
 
-                        String posts = String.valueOf( user.getPosts() );
+                        //String posts = String.valueOf( user.getPosts() );
                         String follow = String.valueOf( user.getFollow() );
                         String followers = String.valueOf( user.getFollowers() );
 
-                        textViewPublications.setText(posts);
+                        //textViewPublications.setText(posts);
                         textViewFollow.setText(follow);
                         textViewFollowers.setText(followers);
 
