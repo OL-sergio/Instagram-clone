@@ -154,7 +154,10 @@ public class FriendsProfileActivity extends AppCompatActivity {
                 textViewPublications.setText( String.valueOf(totalPost) );
 
                 //Configuration of Adapter
-                adapterGrid = new AdapterGrid(getApplicationContext(), R.layout.row_view_gridview_post, urlPhotos);
+                adapterGrid = new AdapterGrid(
+                        getApplicationContext(), R.layout.row_view_gridview_post, urlPhotos
+                );
+
                 gridViewProfilePosts.setAdapter(adapterGrid);
 
             }
@@ -341,6 +344,7 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onStop() {
+        binding = null;
         super.onStop();
         referenceUsers.removeEventListener(valueEventListenerFriendProfile);
     }
