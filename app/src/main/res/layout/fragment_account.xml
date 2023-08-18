@@ -122,7 +122,7 @@
         android:importantForAccessibility="no" />
 
     <GridView
-        android:id="@+id/gridView_profile"
+        android:id="@+id/gridView_profilePosts"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginStart="16dp"
@@ -130,6 +130,7 @@
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
         android:background="@color/white"
+        android:numColumns="3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

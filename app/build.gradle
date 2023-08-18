@@ -69,4 +69,8 @@ dependencies {
 
     //https://github.com/Zomato/AndroidPhotoFilters
     implementation 'com.github.zomato:androidphotofilters:1.0.2'
+
+    //https://github.com/nostra13/Android-Universal-Image-Loader
+    implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
+
 }

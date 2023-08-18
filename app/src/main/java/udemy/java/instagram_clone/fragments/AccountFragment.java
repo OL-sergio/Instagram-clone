@@ -85,7 +85,7 @@ public class AccountFragment extends Fragment {
     }
 
     private void startComponents() {
-        gridViewProfile = binding.gridViewProfile;
+        gridViewProfile = binding.gridViewProfilePosts;
         progressBar = binding.progressBarAccountProfile;
         circleImageViewProfileImage = binding.circleImageViewProfileImage;
         textViewPublications = binding.textViewNumberPublications;

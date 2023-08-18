@@ -2,7 +2,6 @@ package udemy.java.instagram_clone.activity;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
@@ -17,6 +16,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.nostra13.universalimageloader.cache.disc.naming.HashCodeFileNameGenerator;
+import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +28,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
+import udemy.java.instagram_clone.adapter.AdapterGrid;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityFriendsProfileBinding;
@@ -45,7 +49,9 @@ public class FriendsProfileActivity extends AppCompatActivity {
     private DatabaseReference referenceUserLogged;
     private DatabaseReference referencePostUsers;
 
-    private GridView gridViewProfile;
+    private AdapterGrid adapterGrid;
+
+    private GridView gridViewProfilePosts;
     private TextView textViewPublications, textViewFollowers, textViewFollow;
 
     private ValueEventListener valueEventListenerFriendProfile;
@@ -105,8 +111,23 @@ public class FriendsProfileActivity extends AppCompatActivity {
             }
         }
 
+        startImageLoader();
 
         retrievingPhotosPosts();
+
+    }
+
+    private void startImageLoader(){
+
+        ImageLoaderConfiguration configuration = new ImageLoaderConfiguration
+                .Builder(this)
+                .memoryCache(new LruMemoryCache(2 * 1024 * 1024))
+                .memoryCacheSize(2 * 1024 * 1024)
+                .diskCacheSize(50 * 1024 * 1024)
+                .diskCacheFileCount(100)
+                .diskCacheFileNameGenerator(new HashCodeFileNameGenerator())
+                .build();
+        ImageLoader.getInstance().init(configuration);
 
     }
 
@@ -116,16 +137,25 @@ public class FriendsProfileActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                List<String> urlPhoto = new ArrayList<>();
+                //Configuration the size of Grid
+                int gridSize = getResources().getDisplayMetrics().widthPixels;
+                int imageSize = gridSize / 3;
+                gridViewProfilePosts.setColumnWidth( imageSize );
+
+                List<String> urlPhotos = new ArrayList<>();
                 for ( DataSnapshot ds: snapshot.getChildren()  ){
                     Posts posts = ds.getValue(Posts.class);
-                    Log.d("post","urlPhoto" + posts.getPhotoUrl() );
-                    urlPhoto.add(posts.getPhotoUrl());
+                    //Log.d("post","urlPhoto" + posts.getPhotoUrl() );
+                    urlPhotos.add(posts.getPhotoUrl());
 
                 }
 
-                int totalPost = urlPhoto.size();
+                int totalPost = urlPhotos.size();
                 textViewPublications.setText( String.valueOf(totalPost) );
+
+                //Configuration of Adapter
+                adapterGrid = new AdapterGrid(getApplicationContext(), R.layout.row_view_gridview_post, urlPhotos);
+                gridViewProfilePosts.setAdapter(adapterGrid);
 
             }
 
@@ -134,7 +164,6 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
             }
         });
-
     }
 
     private void retrievedCurrentUserLogged(){
@@ -154,8 +183,9 @@ public class FriendsProfileActivity extends AppCompatActivity {
                     public void onCancelled(@NonNull DatabaseError error) {
 
                     }
-                });
+                }
 
+        );
     }
 
 
@@ -280,8 +310,7 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
     private void startComponents() {
 
-
-        gridViewProfile = binding.profileFragment.gridViewProfile;
+        gridViewProfilePosts = binding.profileFragment.gridViewProfilePosts;
         textViewPublications = binding.profileFragment.textViewNumberPublications;
         textViewFollowers = binding.profileFragment.textViewNumberFollowers;
         textViewFollow = binding.profileFragment.textViewNumberFollowing;
