@@ -2,9 +2,11 @@ package udemy.java.instagram_clone.model;
 
 import com.google.firebase.database.DatabaseReference;
 
+import java.io.Serializable;
+
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 
-public class Posts {
+public class Posts implements Serializable {
 
     private String id;
     private String idUser;

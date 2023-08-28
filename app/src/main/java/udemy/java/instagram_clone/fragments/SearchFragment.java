@@ -129,7 +129,6 @@ public class SearchFragment extends Fragment {
     private void textSearchForUsers(String textSearch) {
 
         userList.clear();
-
         //Search for users case text on search
         if (textSearch.length() > 2 ){
 

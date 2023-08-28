@@ -1,8 +1,10 @@
 package udemy.java.instagram_clone.activity;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
@@ -38,6 +40,8 @@ import udemy.java.instagram_clone.model.User;
 public class FriendsProfileActivity extends AppCompatActivity {
 
     private ActivityFriendsProfileBinding binding;
+
+    private  List<Posts> postsList;
 
     private Button buttonActionProfile;
     private CircleImageView circleImageViewProfile;
@@ -115,6 +119,27 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
         retrievingPhotosPosts();
 
+        selectedPhotoFullView();
+
+        gridViewProfilePosts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                Posts posts = postsList.get( position );
+                Intent intent = new Intent( getApplicationContext(), ImageFullViewActivity.class );
+
+                intent.putExtra("posts", posts );
+                intent.putExtra("user", userSelected );
+
+                startActivity(intent);
+            }
+        } );
+
+    }
+
+    private void selectedPhotoFullView() {
+
+
     }
 
     private void startImageLoader(){
@@ -133,6 +158,8 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
     private void retrievingPhotosPosts() {
 
+        postsList = new ArrayList<>();
+
         referencePostUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -146,6 +173,9 @@ public class FriendsProfileActivity extends AppCompatActivity {
                 for ( DataSnapshot ds: snapshot.getChildren()  ){
                     Posts posts = ds.getValue(Posts.class);
                     //Log.d("post","urlPhoto" + posts.getPhotoUrl() );
+
+                    postsList.add(posts);
+
                     urlPhotos.add(posts.getPhotoUrl());
 
                 }
