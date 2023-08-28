@@ -16,15 +16,15 @@ public class User implements Serializable {
     private String email;
     private String password;
     private String urlPhoto;
-    private int followers = 0;
-    private int follow = 0;
-    private int posts = 0;
+    private int totalFollowers = 0;
+    private int totalFollow = 0;
+    private int totalPosts = 0;
 
     public User() {
     }
 
 
-    public void saveUser(User user){
+    public void saveUser(){
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
         DatabaseReference users = databaseReference
                 .child("users")
@@ -38,10 +38,25 @@ public class User implements Serializable {
         DatabaseReference usersReference = firebaseReference
                 .child("users")
                 .child(getUID());
+
         Map<String, Object> userValues = convertToMAp();
         usersReference.updateChildren(userValues);
 
     }
+    public void updateTotalPost(){
+
+        DatabaseReference firebaseReference = ConfigurationFirebase.getDatabaseReference();
+        DatabaseReference usersReference = firebaseReference
+                .child("users")
+                .child(getUID());
+
+        HashMap<String, Object> data = new HashMap<>();
+        data.put("totalPosts", getTotalPosts());
+
+        usersReference.updateChildren( data );
+
+    }
+
 
     public Map<String, Object > convertToMAp(){
         HashMap<String, Object> userMap = new HashMap<>();
@@ -49,9 +64,9 @@ public class User implements Serializable {
         userMap.put("name", getName());
         userMap.put("uid", getUID());
         userMap.put("urlPhoto", getUrlPhoto());
-        userMap.put("followers", getFollowers());
-        userMap.put("follow", getFollow());
-        userMap.put("posts", getPosts());
+        //userMap.put("totalFollowers", getTotalFollowers());
+        //userMap.put("totalFollow", getTotalFollow());
+        //userMap.put("totalPosts", getTotalPosts());
 
         return userMap;
     }
@@ -97,27 +112,27 @@ public class User implements Serializable {
         this.urlPhoto = urlPhoto;
     }
 
-    public int getFollowers() {
-        return followers;
+    public int getTotalFollowers() {
+        return totalFollowers;
     }
 
-    public void setFollowers(int followers) {
-        this.followers = followers;
+    public void setTotalFollowers(int totalFollowers) {
+        this.totalFollowers = totalFollowers;
     }
 
-    public int getFollow() {
-        return follow;
+    public int getTotalFollow() {
+        return totalFollow;
     }
 
-    public void setFollow(int follow) {
-        this.follow = follow;
+    public void setTotalFollow(int totalFollow) {
+        this.totalFollow = totalFollow;
     }
 
-    public int getPosts() {
-        return posts;
+    public int getTotalPosts() {
+        return totalPosts;
     }
 
-    public void setPosts(int posts) {
-        this.posts = posts;
+    public void setTotalPosts(int posts) {
+        this.totalPosts = posts;
     }
 }

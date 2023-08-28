@@ -41,7 +41,6 @@ public class MainActivity extends AppCompatActivity {
     final Fragment accountFragment = new AccountFragment();
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,16 +66,17 @@ public class MainActivity extends AppCompatActivity {
 
         bottomNavigation();
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.viewPager, searchFragment).commit();
+
     }
 
     private void bottomNavigation() {
 
         Bundle bundle = null;
 
-        if (bundle == null) {
-            FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.viewPager, searchFragment).commit();
-        }
 
         btmNav.setOnItemSelectedListener(item -> {
             FragmentManager fragmentManager = getSupportFragmentManager();

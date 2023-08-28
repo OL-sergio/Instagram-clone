@@ -147,9 +147,9 @@ public class SearchFragment extends Fragment {
 
                         User user = dataSnapshot.getValue(User.class);
 
-                        if( userLoggedId.equals( user.getUID() ))
+                        if(userLoggedId.equals(user.getUID()))
                             continue;
-                            userList.add(user);
+                        userList.add(user);
 
                     }
 

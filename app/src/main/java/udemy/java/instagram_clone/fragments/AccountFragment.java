@@ -188,8 +188,8 @@ public class AccountFragment extends Fragment {
 
                         //String posts = String.valueOf( user.getPosts() );
 
-                        String follow = String.valueOf( user.getFollow() );
-                        String followers = String.valueOf( user.getFollowers() );
+                        String follow = String.valueOf( user.getTotalFollow() );
+                        String followers = String.valueOf( user.getTotalFollowers() );
 
                         //textViewPublications.setText(posts);
                         textViewFollowing.setText(follow);
@@ -229,9 +229,9 @@ public class AccountFragment extends Fragment {
 
     @Override
     public void onStop() {
-        binding = null;
         super.onStop();
 
+        binding = null;
         referenceUserLogged.removeEventListener(valueEventListenerUserProfile);
 
     }

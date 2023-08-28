@@ -23,7 +23,6 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.io.ByteArrayOutputStream;
-import java.util.Objects;
 
 import udemy.java.instagram_clone.activity.FilterActivity;
 import udemy.java.instagram_clone.databinding.FragmentShareBinding;
@@ -31,7 +30,6 @@ import udemy.java.instagram_clone.helper.Permissions;
 
 
 public class ShareFragment extends Fragment {
-
 
     private FragmentShareBinding binding;
 
@@ -78,7 +76,8 @@ public class ShareFragment extends Fragment {
         buttonOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent( MediaStore.ACTION_IMAGE_CAPTURE );
+                Intent intent = new Intent();
+                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
                 takePhotoActivityResultLauncher.launch(intent);
             }
         });
@@ -91,8 +90,8 @@ public class ShareFragment extends Fragment {
                 @Override
                 public void onActivityResult(ActivityResult result ) {
 
-                  if( result.getResultCode() == Activity.RESULT_OK) {
-                        assert result.getData() != null;
+                  if( result.getResultCode() == Activity.RESULT_OK && result.getData() != null ) {
+
 
                       Uri url = result.getData().getData();
 
@@ -102,7 +101,7 @@ public class ShareFragment extends Fragment {
                          image = MediaStore.Images.Media.getBitmap( contentResolver, url);
 
                          ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
-                         image.compress(Bitmap.CompressFormat.JPEG, 25, dataOutput);
+                         image.compress(Bitmap.CompressFormat.JPEG, 15, dataOutput);
                          byte [] dataImage = dataOutput.toByteArray();
 
                           if (image != null){
@@ -110,7 +109,6 @@ public class ShareFragment extends Fragment {
                               Intent intent = new Intent(getActivity(), FilterActivity.class );
                               intent.putExtra("selectedPhoto", dataImage);
                               startActivity(intent);
-
                             }
 
                         } catch (Exception e) {
@@ -126,14 +124,14 @@ public class ShareFragment extends Fragment {
             new ActivityResultCallback<ActivityResult>() {
                 @Override
                 public void onActivityResult(ActivityResult result ) {
-                    if( result.getResultCode() == Activity.RESULT_OK) {
 
-                        Bundle photoData  = Objects.requireNonNull(result.getData()).getExtras();
+                    if( result.getResultCode() == Activity.RESULT_OK && result.getData() != null  ) {
+
+                        Bundle photoData  = result.getData().getExtras();
                         image  = (Bitmap) photoData.get("data");
 
                         try {
 
-                            assert result.getData() != null;
 
                             ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
                             image.compress(Bitmap.CompressFormat.JPEG, 60, dataOutput);

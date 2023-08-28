@@ -10,7 +10,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/circleImageView_profileImage"
         android:layout_width="60dp"
-        android:layout_height="0dp"
+        android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:src="@drawable/avatar"
         app:layout_constraintBottom_toTopOf="@+id/guideline7"

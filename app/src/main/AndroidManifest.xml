@@ -46,7 +46,7 @@
             android:parentActivityName=".activity.MainActivity" />
         <activity
             android:name=".activity.RegisterActivity"
-            android:exported="true"
+            android:exported="false"
             android:theme="@style/AppThemeLogin" />
         <activity
             android:name=".activity.LoginActivity"
@@ -60,7 +60,7 @@
         </activity>
         <activity
             android:name=".activity.MainActivity"
-            android:exported="false" />
+            android:exported="true" />
     </application>
 
 </manifest>

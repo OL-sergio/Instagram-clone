@@ -122,7 +122,7 @@ public class RegisterActivity extends AppCompatActivity {
                         //Saving user data on firebase
                         String idUserIdentification = Objects.requireNonNull(task.getResult().getUser()).getUid();
                         user.setUID(idUserIdentification);
-                        user.saveUser(user);
+                        user.saveUser();
 
                         //Saving profile user data on firebase
                         UserFirebase.updateUserName(user.getName());

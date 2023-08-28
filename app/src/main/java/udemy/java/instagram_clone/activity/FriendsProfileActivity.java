@@ -230,18 +230,18 @@ public class FriendsProfileActivity extends AppCompatActivity {
         buttonActionProfile.setOnClickListener(null);
 
 
-        int follow = loggUser.getFollow() + 1;
+        int follow = loggUser.getTotalFollow() + 1;
         HashMap<String, Object> followData = new HashMap<>();
-        followData.put( "follow", follow );
+        followData.put( "totalFollow", follow );
 
         DatabaseReference userFollow = referenceUsers
                 .child(loggUser.getUID());
         userFollow.updateChildren(followData);
 
 
-        int followers = userFriend.getFollowers() + 1;
+        int followers = userFriend.getTotalFollowers() + 1;
         HashMap<String, Object> followersData = new HashMap<>();
-        followersData.put( "followers", followers );
+        followersData.put( "totalFollowers", followers );
 
         DatabaseReference userFollowers = referenceUsers
                 .child(userFriend.getUID());
@@ -295,8 +295,8 @@ public class FriendsProfileActivity extends AppCompatActivity {
                         User user = snapshot.getValue(User.class);
 
                         //String posts = String.valueOf( user.getPosts() );
-                        String follow = String.valueOf( user.getFollow() );
-                        String followers = String.valueOf( user.getFollowers() );
+                        String follow = String.valueOf( user.getTotalFollow() );
+                        String followers = String.valueOf( user.getTotalFollowers() );
 
                         //textViewPublications.setText(posts);
                         textViewFollow.setText(follow);

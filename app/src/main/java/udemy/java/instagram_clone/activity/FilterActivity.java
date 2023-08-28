@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.zomato.photofilters.SampleFilters;
@@ -45,6 +50,7 @@ import udemy.java.instagram_clone.helper.ThumbnailsManager;
 import udemy.java.instagram_clone.listener.ThumbnailListener;
 import udemy.java.instagram_clone.model.Posts;
 import udemy.java.instagram_clone.model.ThumbnailItem;
+import udemy.java.instagram_clone.model.User;
 
 public class FilterActivity extends AppCompatActivity implements ThumbnailListener {
 
@@ -57,22 +63,30 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
     private Activity activity;
 
+    private DatabaseReference referenceUserLogged;
+    private DatabaseReference referenceUser;
+
+    private User userLogged;
+
+    private List <ThumbnailItem> listFilters;
+
     private ImageView imageViewSelectedPhoto;
     private TextInputEditText textInpEditTextDescription;
+
     private Bitmap image;
     private Bitmap imageFilter;
     private Bitmap outputImage;
     private RecyclerView recyclerViewFilters;
+    private ProgressBar progressBar;
+    private boolean statusUpload;
 
     private Bundle bundle;
-
-    private List <ThumbnailItem> listFilters;
 
     private String idUserLogged;
 
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate( Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         binding = ActivityFilterBinding.inflate(getLayoutInflater());
@@ -90,17 +104,20 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
         listFilters = new ArrayList<>();
         idUserLogged = UserFirebase.getUserIdentification();
-
+        referenceUser = ConfigurationFirebase.getDatabaseReference().child("users");
 
         imageViewSelectedPhoto = binding.imageViewSelectedPhoto;
         textInpEditTextDescription = binding.textInputEditTextFilterDescription;
         recyclerViewFilters = binding.recyclerViewImageFilters;
+        progressBar = binding.progressBar;
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         layoutManager.scrollToPosition(0);
         recyclerViewFilters.setLayoutManager(layoutManager);
         recyclerViewFilters.setHasFixedSize(true);
+
+        retrievedCurrentUserLogged();
 
         bundle = getIntent().getExtras();
         if (bundle != null){
@@ -114,7 +131,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
                 imageViewSelectedPhoto.setImageBitmap(
                         Bitmap.createScaledBitmap(
-                               image, 640, 640, false)
+                               image, 640, 400, false)
                 );
 
                 imageFilter = image.copy(image.getConfig(), true );
@@ -207,7 +224,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
                 if(image != null ){
 
                   thumbImage = Bitmap.createScaledBitmap(
-                            image, 640, 640, false);
+                            image, 640, 400, false);
 
                 }else {
 
@@ -291,8 +308,8 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
             if (image != null){
 
-                Bitmap  imagePhotoData =   filter.processFilter(
-                        Bitmap.createScaledBitmap( image, 640, 640, false)
+                Bitmap  imagePhotoData = filter.processFilter(
+                        Bitmap.createScaledBitmap( image, 640, 400, false)
                 );
 
                 imageFilter = imagePhotoData.copy(imagePhotoData.getConfig(), true );
@@ -336,56 +353,103 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     }
 
     private void savePost() {
-        Posts posts = new Posts();
-        posts.setIdUser( idUserLogged );
-        //posts.setPhotoUrl();
-        posts.setPostDescription( textInpEditTextDescription.getText().toString() );
 
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        imageFilter.compress(Bitmap.CompressFormat.JPEG, 60, baos);
+        if (statusUpload) {
 
-        byte[] imageData = baos.toByteArray();
+            Toast.makeText(activity,
+                    "Esta a carregar os dados, aguarde um momento!", Toast.LENGTH_SHORT).show();
 
-        StorageReference storageRef = ConfigurationFirebase.getFirebaseStorage();
-        final StorageReference imageRef = storageRef
-                .child("images")
-                .child("posts")
-                .child(posts.getId() + ".jpg");
+        } else {
 
-        UploadTask uploadTask = imageRef.putBytes( imageData );
+            Posts posts = new Posts();
+            posts.setIdUser( idUserLogged );
+            //posts.setPhotoUrl();
+            posts.setPostDescription( textInpEditTextDescription.getText().toString() );
 
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(FilterActivity.this, "Falha á criar imagen, tente novamente! ",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            imageFilter.compress(Bitmap.CompressFormat.JPEG, 60, baos);
 
-                imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Uri> task) {
-                        Uri url = task.getResult();
-                        posts.setPhotoUrl( url.toString() );
+            byte[] imageData = baos.toByteArray();
 
-                        if (posts.savePost()){
-                            Toast.makeText(FilterActivity.this, "Sucesso á criar post! ",
-                                    Toast.LENGTH_SHORT).show();
+            StorageReference storageRef = ConfigurationFirebase.getFirebaseStorage();
+            final StorageReference imageRef = storageRef
+                    .child("images")
+                    .child("posts")
+                    .child(posts.getId() + ".jpg");
 
-                            finish();
+            UploadTask uploadTask = imageRef.putBytes( imageData );
+
+            uploadTask.addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Toast.makeText(FilterActivity.this, "Falha á criar imagen, tente novamente! ",
+                            Toast.LENGTH_SHORT).show();
+                }
+            }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+
+                    imageRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            Uri url = task.getResult();
+                            posts.setPhotoUrl( url.toString() );
+
+                            if (posts.savePost()){
+                                //Update total posts
+                                int totalPosts  = ( userLogged.getTotalPosts() + 1 ) ;
+                                userLogged.setTotalPosts( totalPosts );
+                                userLogged.updateTotalPost();
+
+                                Toast.makeText(FilterActivity.this, "Sucesso á criar o post! ",
+                                        Toast.LENGTH_SHORT).show();
+
+                                finish();
+                            }
                         }
+                    });
+                }
+            });
+        }
+    }
+
+
+    private void loading(boolean status) {
+
+        if (status){
+            statusUpload = true;
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            statusUpload= false;
+            progressBar.setVisibility(View.GONE);
+        }
+
+    }
+
+    private void retrievedCurrentUserLogged() {
+
+        loading( true);
+        referenceUserLogged = referenceUser.child( idUserLogged );
+        referenceUserLogged.addListenerForSingleValueEvent(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                       userLogged = snapshot.getValue(User.class);
+                        //Log.d("userLogged", String.valueOf(userLogged));
+                        loading(false);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
                     }
                 });
-            }
-        });
+
     }
 
     @Override
     public boolean onSupportNavigateUp() {
         finish();
-        imageFilter = null;
         return false;
     }
 }
