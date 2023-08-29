@@ -1,6 +1,7 @@
 package udemy.java.instagram_clone.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -13,7 +14,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -77,7 +77,9 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     private Bitmap imageFilter;
     private Bitmap outputImage;
     private RecyclerView recyclerViewFilters;
-    private ProgressBar progressBar;
+
+    private AlertDialog alertDialog;
+
     private boolean statusUpload;
 
     private Bundle bundle;
@@ -109,7 +111,6 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
         imageViewSelectedPhoto = binding.imageViewSelectedPhoto;
         textInpEditTextDescription = binding.textInputEditTextFilterDescription;
         recyclerViewFilters = binding.recyclerViewImageFilters;
-        progressBar = binding.progressBar;
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
@@ -330,6 +331,20 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     }
 
 
+    private void retrievedDataUserLogged( String title ){
+
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle(title);
+        alert.setCancelable(false);
+        alert.setView(R.layout.alert_dialog_loading);
+
+        alertDialog = alert.create();
+        alertDialog.show();
+
+    }
+
+
     @Override
     public boolean onCreateOptionsMenu( Menu menu ) {
 
@@ -354,14 +369,9 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
     private void savePost() {
 
-        if (statusUpload) {
+            retrievedDataUserLogged("Carregando dados, aguarde!");
 
-            Toast.makeText(activity,
-                    "Esta a carregar os dados, aguarde um momento!", Toast.LENGTH_SHORT).show();
-
-        } else {
-
-            Posts posts = new Posts();
+            final Posts posts = new Posts();
             posts.setIdUser( idUserLogged );
             //posts.setPhotoUrl();
             posts.setPostDescription( textInpEditTextDescription.getText().toString() );
@@ -404,40 +414,30 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
                                 Toast.makeText(FilterActivity.this, "Sucesso á criar o post! ",
                                         Toast.LENGTH_SHORT).show();
 
+                                alertDialog.cancel();
                                 finish();
                             }
                         }
                     });
                 }
             });
-        }
     }
 
 
-    private void loading(boolean status) {
-
-        if (status){
-            statusUpload = true;
-            progressBar.setVisibility(View.VISIBLE);
-        } else {
-            statusUpload= false;
-            progressBar.setVisibility(View.GONE);
-        }
-
-    }
 
     private void retrievedCurrentUserLogged() {
 
-        loading( true);
+        retrievedDataUserLogged("Carregando dados, aguarde!");
         referenceUserLogged = referenceUser.child( idUserLogged );
         referenceUserLogged.addListenerForSingleValueEvent(
                 new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                       userLogged = snapshot.getValue(User.class);
+                        userLogged = snapshot.getValue(User.class);
                         //Log.d("userLogged", String.valueOf(userLogged));
-                        loading(false);
+                        alertDialog.cancel();
+
                     }
 
                     @Override
