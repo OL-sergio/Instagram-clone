@@ -46,6 +46,7 @@ import udemy.java.instagram_clone.adapter.ThumbnailsAdapter;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityFilterBinding;
+import udemy.java.instagram_clone.helper.CustomAlertDialog;
 import udemy.java.instagram_clone.helper.ThumbnailsManager;
 import udemy.java.instagram_clone.listener.ThumbnailListener;
 import udemy.java.instagram_clone.model.Posts;
@@ -79,13 +80,15 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     private RecyclerView recyclerViewFilters;
 
     private AlertDialog alertDialog;
+    private CustomAlertDialog dialogCustom;
 
     private boolean statusUpload;
 
     private Bundle bundle;
+    private Context context = null;
 
     private String idUserLogged;
-
+    private String alertTitle;
 
     @Override
     protected void onCreate( Bundle savedInstanceState) {
@@ -331,7 +334,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     }
 
 
-    private void retrievedDataUserLogged( String title ){
+    private void showAlertProgressBar( String title ){
 
 
         AlertDialog.Builder alert = new AlertDialog.Builder(this);
@@ -368,8 +371,8 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
     }
 
     private void savePost() {
-
-            retrievedDataUserLogged("Carregando dados, aguarde!");
+            //showAlertProgressBar("Carregando dados, aguarde!");
+            CustomAlertDialog.setAlertDialog(this, "Carregando dados, aguarde!");
 
             final Posts posts = new Posts();
             posts.setIdUser( idUserLogged );
@@ -414,7 +417,9 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
                                 Toast.makeText(FilterActivity.this, "Sucesso á criar o post! ",
                                         Toast.LENGTH_SHORT).show();
 
-                                alertDialog.cancel();
+                               //alertDialog.cancel();
+                                CustomAlertDialog.dismissAlertDialog();
+
                                 finish();
                             }
                         }
@@ -427,7 +432,9 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
     private void retrievedCurrentUserLogged() {
 
-        retrievedDataUserLogged("Carregando dados, aguarde!");
+        //showAlertProgressBar("Carregando dados, aguarde!");
+        CustomAlertDialog.setAlertDialog(this, "Carregando dados, aguarde!");
+
         referenceUserLogged = referenceUser.child( idUserLogged );
         referenceUserLogged.addListenerForSingleValueEvent(
                 new ValueEventListener() {
@@ -436,8 +443,8 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
                         userLogged = snapshot.getValue(User.class);
                         //Log.d("userLogged", String.valueOf(userLogged));
-                        alertDialog.cancel();
-
+                        //alertDialog.cancel();
+                        CustomAlertDialog.dismissAlertDialog();
                     }
 
                     @Override
