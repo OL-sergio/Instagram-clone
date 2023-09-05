@@ -66,6 +66,8 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
     private DatabaseReference referenceUserLogged;
     private DatabaseReference referenceUser;
+    private DatabaseReference firebaseReference;
+    private DataSnapshot followersSnapshot;
 
     private User userLogged;
 
@@ -108,6 +110,8 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
         getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_24);
 
         listFilters = new ArrayList<>();
+
+        firebaseReference = ConfigurationFirebase.getDatabaseReference();
         idUserLogged = UserFirebase.getUserIdentification();
         referenceUser = ConfigurationFirebase.getDatabaseReference().child("users");
 
@@ -121,7 +125,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
         recyclerViewFilters.setLayoutManager(layoutManager);
         recyclerViewFilters.setHasFixedSize(true);
 
-        retrievedCurrentUserLogged();
+        retrieveDataPost();
 
         bundle = getIntent().getExtras();
         if (bundle != null){
@@ -370,7 +374,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
         return super.onOptionsItemSelected(item);
     }
 
-    private void savePost() {
+    private void savePost( ) {
             //showAlertProgressBar("Carregando dados, aguarde!");
             CustomAlertDialog.setAlertDialog(this, "Carregando dados, aguarde!");
 
@@ -408,11 +412,13 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
                             Uri url = task.getResult();
                             posts.setPhotoUrl( url.toString() );
 
-                            if (posts.savePost()){
-                                //Update total posts
-                                int totalPosts  = ( userLogged.getTotalPosts() + 1 ) ;
-                                userLogged.setTotalPosts( totalPosts );
-                                userLogged.updateTotalPost();
+                            //Update total posts
+                            int totalPosts  = ( userLogged.getTotalPosts() + 1 ) ;
+                            userLogged.setTotalPosts( totalPosts );
+                            userLogged.updateTotalPost();
+
+
+                            if (posts.savePost(  followersSnapshot )){
 
                                 Toast.makeText(FilterActivity.this, "Sucesso á criar o post! ",
                                         Toast.LENGTH_SHORT).show();
@@ -430,7 +436,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
 
 
-    private void retrievedCurrentUserLogged() {
+    private void retrieveDataPost() {
 
         //showAlertProgressBar("Carregando dados, aguarde!");
         CustomAlertDialog.setAlertDialog(this, "Carregando dados, aguarde!");
@@ -443,8 +449,28 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
                         userLogged = snapshot.getValue(User.class);
                         //Log.d("userLogged", String.valueOf(userLogged));
-                        //alertDialog.cancel();
-                        CustomAlertDialog.dismissAlertDialog();
+
+
+                        DatabaseReference followersReference = firebaseReference
+                                .child("followers" )
+                                .child( idUserLogged );
+                        followersReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                                followersSnapshot = snapshot;
+
+                                //alertDialog.cancel();
+                                CustomAlertDialog.dismissAlertDialog();
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+
+
                     }
 
                     @Override

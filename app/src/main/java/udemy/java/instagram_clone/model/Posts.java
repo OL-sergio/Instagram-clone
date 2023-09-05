@@ -1,10 +1,14 @@
 package udemy.java.instagram_clone.model;
 
+import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 
 import java.io.Serializable;
+import java.util.HashMap;
+import java.util.Map;
 
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
+import udemy.java.instagram_clone.config.UserFirebase;
 
 public class Posts implements Serializable {
 
@@ -23,13 +27,59 @@ public class Posts implements Serializable {
     }
 
 
-    public boolean savePost(){
+    public boolean savePost(DataSnapshot followersSnapshot ){
+
+        Map object = new HashMap();
+        User userLogged = UserFirebase.getLoggedUserData();
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
-        DatabaseReference postsRef = databaseReference.child("posts")
+
+
+        //Post reference
+        String combinationId = "/" + getIdUser() + "/" + getId();
+        object.put( "/posts" + combinationId, this );
+
+
+
+        for ( DataSnapshot snapshot: followersSnapshot.getChildren() ){
+
+            /****
+             *
+             * feed
+             *   id_followers < friend User >
+             *      id_posts < id >
+             *          posts< current user >
+             */
+
+            String idFollowers = followersSnapshot.getKey();
+
+            HashMap<String, Object> followerData = new HashMap<>();
+            followerData.put("photoUrl", getPhotoUrl() );
+            followerData.put("postDescription", getPostDescription());
+            followerData.put("id", getId());
+
+            followerData.put("userName", userLogged.getName() );
+            followerData.put("userPhoto", userLogged.getUrlPhoto() );
+
+            String idsUpdated = "/" + idFollowers + "/" + getId();
+            object.put("/feed" + idsUpdated, followerData);
+
+        }
+
+
+        //object.put( "/feed" + combinationId, this );
+
+        //object.put( "/highlights" + combinationId, this );
+
+
+        databaseReference.updateChildren(object);
+
+       /*
+       * DatabaseReference postsRef = databaseReference.child("posts")
                 .child(getIdUser())
-                .child(getId());
-        postsRef.setValue(this);
+                .child(getId());*/
+
+       // postsRef.setValue(this);
 
         return true;
     }
