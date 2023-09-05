@@ -247,14 +247,22 @@ public class FriendsProfileActivity extends AppCompatActivity {
 
     private void saveFollowers( User loggUser, User userFriend ) {
 
-        HashMap<String, Object> friendsData = new HashMap<>();
-        friendsData.put( "name", userFriend.getName() );
-        friendsData.put( "urlPhoto", userFriend.getUrlPhoto() );
+        /*
+         * followers
+         *   id_Current_user (id friend)
+         *      id_user_logged ( id user logged)
+         *          data_logged
+         * */
+
+
+        HashMap<String, Object> loggedUserData = new HashMap<>();
+        loggedUserData.put( "name", userLogged.getName() );
+        loggedUserData.put( "urlPhoto", userLogged.getUrlPhoto() );
 
         DatabaseReference followerReference = referenceFollowers
-                .child( loggUser.getUID() )
-                .child( userFriend.getUID() );
-        followerReference.setValue(friendsData);
+                .child( userFriend.getUID() )
+                .child( loggUser.getUID() );
+        followerReference.setValue( loggedUserData );
 
         buttonActionProfile.setText("Seguindo");
         buttonActionProfile.setOnClickListener(null);
@@ -284,8 +292,8 @@ public class FriendsProfileActivity extends AppCompatActivity {
     private void verificationUserFriendFollow() {
 
         DatabaseReference followReference = referenceFollowers
-                .child( userLoggedId )
-                .child( userSelected.getUID() );
+                .child( userSelected.getUID() )
+                .child( userLoggedId );
 
         followReference.addListenerForSingleValueEvent(
                 new ValueEventListener() {
