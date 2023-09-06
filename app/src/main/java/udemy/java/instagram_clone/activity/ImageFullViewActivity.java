@@ -76,12 +76,11 @@ public class ImageFullViewActivity extends AppCompatActivity {
 
     private void startComponents() {
 
-        circleImageViewUserProfilePost = binding.circleImageViewFullImageViewProfileImage;
-        textViewProfileName = binding.textViewFullImageViewProfileName;
-        imageViewSelectedPost = binding.imageViewFullImageViewSelectedPhoto;
-        textViewTotalLikes = binding.textViewFullImageViewTotalLikes;
-        textViewLastDescritions = binding.textViewFullImageViewDescriptions;
-        textViewAllComments = binding.textViewFullImageViewViewAllComments;
+        circleImageViewUserProfilePost = binding.fullImageActivityPosts.circleImageViewFullImageViewProfileImage;
+        textViewProfileName = binding.fullImageActivityPosts.textViewFullImageViewProfileName;
+        imageViewSelectedPost = binding.fullImageActivityPosts.imageViewFullImageViewSelectedPhoto;
+        textViewLastDescritions = binding.fullImageActivityPosts.textViewFullImageViewDescriptions;
+        textViewAllComments = binding.fullImageActivityPosts.textViewFullImageViewDescriptions;
 
     }
 
