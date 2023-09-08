@@ -139,7 +139,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
 
                 imageViewSelectedPhoto.setImageBitmap(
                         Bitmap.createScaledBitmap(
-                               image, 640, 400, false)
+                               image, 640, 640, false)
                 );
 
                 imageFilter = image.copy(image.getConfig(), true );
@@ -232,7 +232,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
                 if(image != null ){
 
                   thumbImage = Bitmap.createScaledBitmap(
-                            image, 640, 400, false);
+                            image, 640, 640, false);
 
                 }else {
 
@@ -317,7 +317,7 @@ public class FilterActivity extends AppCompatActivity implements ThumbnailListen
             if (image != null){
 
                 Bitmap  imagePhotoData = filter.processFilter(
-                        Bitmap.createScaledBitmap( image, 640, 400, false)
+                        Bitmap.createScaledBitmap( image, 640, 640, false)
                 );
 
                 imageFilter = imagePhotoData.copy(imagePhotoData.getConfig(), true );

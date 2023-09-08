@@ -21,9 +21,7 @@
             android:layout_width="match_parent"
             android:layout_height="500dp"
             android:importantForAccessibility="no"
-            android:scaleType="centerCrop"
-            android:scaleX="0.9"
-            android:scaleY="0.9" />
+            android:scaleType="fitXY" />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditText_filterDescription"

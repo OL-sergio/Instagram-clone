@@ -20,14 +20,14 @@ import java.util.List;
 
 import udemy.java.instagram_clone.R;
 
-public class AdapterGrid extends ArrayAdapter<String> {
+public class GridAdapter extends ArrayAdapter<String> {
 
     private Context context;
     private int layoutResource;
     private List<String> urlPhotos;
 
 
-    public AdapterGrid(@NonNull Context context, int resource, @NonNull List<String> objects) {
+    public GridAdapter(@NonNull Context context, int resource, @NonNull List<String> objects) {
         super(context, resource, objects);
 
         this.context = context;

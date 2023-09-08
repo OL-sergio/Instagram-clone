@@ -58,7 +58,7 @@
                 android:paddingTop="12dp">
 
                 <com.like.LikeButton
-                    android:id="@+id/buttonLike_rowViewPosts_likeFeed"
+                    android:id="@+id/buttonLike_fullImageView_likeFeed"
                     app:icon_type="heart"
                     app:icon_size="30dp"
                     android:layout_marginStart="12dp"
@@ -67,7 +67,7 @@
                     android:layout_height="30dp"/>
 
                 <ImageView
-                    android:id="@+id/imageView_rowViewPosts_comments"
+                    android:id="@+id/imageView_fullImageView_comments"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:background="@drawable/comment"
@@ -84,7 +84,7 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:id="@+id/textView_rowViewPosts_totalLikes"
+                    android:id="@+id/textView_fullImageView_totalLikes"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="6dp"
@@ -93,7 +93,7 @@
                     android:textStyle="bold" />
 
                 <TextView
-                    android:id="@+id/textView_rowViewPosts_likes"
+                    android:id="@+id/textView_fullImageView_likes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingStart="6dp"

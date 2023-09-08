@@ -30,7 +30,7 @@ import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
-import udemy.java.instagram_clone.adapter.AdapterGrid;
+import udemy.java.instagram_clone.adapter.GridAdapter;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.ActivityFriendsProfileBinding;
@@ -53,7 +53,7 @@ public class FriendsProfileActivity extends AppCompatActivity {
     private DatabaseReference referenceUserLogged;
     private DatabaseReference referencePostUsers;
 
-    private AdapterGrid adapterGrid;
+    private GridAdapter adapterGrid;
 
     private GridView gridViewProfilePosts;
     private TextView textViewPublications, textViewFollowers, textViewFollow;
@@ -184,7 +184,7 @@ public class FriendsProfileActivity extends AppCompatActivity {
                 textViewPublications.setText( String.valueOf(totalPost) );
 
                 //Configuration of Adapter
-                adapterGrid = new AdapterGrid(
+                adapterGrid = new GridAdapter(
                         getApplicationContext(), R.layout.row_view_gridview_post, urlPhotos
                 );
 

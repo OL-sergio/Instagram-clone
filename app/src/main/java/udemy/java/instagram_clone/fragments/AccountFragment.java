@@ -29,7 +29,7 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.activity.EditProfileActivity;
-import udemy.java.instagram_clone.adapter.AdapterGrid;
+import udemy.java.instagram_clone.adapter.GridAdapter;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.databinding.FragmentAccountBinding;
@@ -53,7 +53,7 @@ public class AccountFragment extends Fragment {
 
     private ValueEventListener valueEventListenerUserProfile;
 
-    private AdapterGrid adapterGrid;
+    private GridAdapter adapterGrid;
 
     private User userLogged;
 
@@ -162,7 +162,7 @@ public class AccountFragment extends Fragment {
                 textViewPublications.setText( String.valueOf(totalPost) );
 
                 //Configuration of Adapter
-               adapterGrid = new AdapterGrid(
+               adapterGrid = new GridAdapter(
                        requireActivity(), R.layout.row_view_gridview_post, urlPhotos
                );
                 gridViewProfilePosts.setAdapter(adapterGrid);

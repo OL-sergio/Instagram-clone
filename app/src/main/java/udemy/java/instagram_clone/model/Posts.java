@@ -27,6 +27,7 @@ public class Posts implements Serializable {
     }
 
 
+    // Fan-out to update multiple strings on the database
     public boolean savePost(DataSnapshot followersSnapshot ){
 
         Map object = new HashMap();
@@ -41,7 +42,7 @@ public class Posts implements Serializable {
 
 
 
-        for ( DataSnapshot snapshot: followersSnapshot.getChildren() ){
+        for ( DataSnapshot followers: followersSnapshot.getChildren() ){
 
             /****
              *
@@ -51,7 +52,7 @@ public class Posts implements Serializable {
              *          posts< current user >
              */
 
-            String idFollowers = followersSnapshot.getKey();
+            String idFollowers = followers.getKey();
 
             HashMap<String, Object> followerData = new HashMap<>();
             followerData.put("photoUrl", getPhotoUrl() );
@@ -71,15 +72,14 @@ public class Posts implements Serializable {
 
         //object.put( "/highlights" + combinationId, this );
 
-
-        databaseReference.updateChildren(object);
-
        /*
        * DatabaseReference postsRef = databaseReference.child("posts")
                 .child(getIdUser())
                 .child(getId());*/
 
        // postsRef.setValue(this);
+
+        databaseReference.updateChildren(object);
 
         return true;
     }
