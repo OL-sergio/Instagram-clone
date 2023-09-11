@@ -58,6 +58,8 @@ public class ShareFragment extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        //Solution?
+       // https://github.com/phamtdat/CameraDemo
 
         buttonOpenCamera = binding.buttonOpenCamara;
         buttonOpenGallery = binding.buttonOpenGallery;
@@ -76,8 +78,7 @@ public class ShareFragment extends Fragment {
         buttonOpenCamera.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setAction(MediaStore.ACTION_IMAGE_CAPTURE_SECURE);
+                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                 takePhotoActivityResultLauncher.launch(intent);
             }
         });

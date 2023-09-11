@@ -20,8 +20,10 @@
             android:id="@+id/imageView_selectedPhoto"
             android:layout_width="match_parent"
             android:layout_height="500dp"
+            android:maxWidth="150dp"
             android:importantForAccessibility="no"
-            android:scaleType="fitXY" />
+
+             />
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/textInputEditText_filterDescription"

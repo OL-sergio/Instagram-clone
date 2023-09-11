@@ -2,6 +2,7 @@ package udemy.java.instagram_clone.adapter;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,22 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 import com.like.LikeButton;
+import com.like.OnLikeListener;
 
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
+import udemy.java.instagram_clone.config.ConfigurationFirebase;
+import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.model.Feed;
+import udemy.java.instagram_clone.model.PostsLike;
+import udemy.java.instagram_clone.model.User;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> {
 
@@ -73,6 +83,46 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
         holder.nameProfile.setText( feed.getUserName() );
         holder.description.setText( feed.getPostDescription() );
 
+        //Retrieved the liked posts
+        DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference()
+                .child("liked-posts")
+                .child( feed.getId() );
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                User userLogged = UserFirebase.getLoggedUserData();
+
+                int totalLikes = 0;
+                if ( snapshot.hasChild("totalLikedPosts" ) ) {
+                    PostsLike postsLike =  snapshot.getValue( PostsLike.class );
+                    totalLikes = postsLike.getTotalLikes();
+                }
+
+                PostsLike liked = new PostsLike();
+                liked.setFeed( feed );
+                liked.setUser( userLogged );
+                liked.setTotalLikes( totalLikes );
+
+                holder.likeButton.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        liked.saveLikedPosts();
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        Log.i("likeButton", "unliked");
+                    }
+                });
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
