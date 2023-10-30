@@ -2,7 +2,6 @@ package udemy.java.instagram_clone.adapter;
 
 import android.content.Context;
 import android.net.Uri;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +25,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
+import udemy.java.instagram_clone.helper.Constants;
 import udemy.java.instagram_clone.model.Feed;
 import udemy.java.instagram_clone.model.PostsLike;
 import udemy.java.instagram_clone.model.User;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> {
 
+    Constants constants = new Constants();
     private List<Feed> feedList;
     private Context context;
 
@@ -57,6 +58,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
             likeButton  = itemView.findViewById(R.id.buttonLike_fullImageView_likeFeed);
             totalLikes  = itemView.findViewById(R.id.textView_fullImageView_totalLikes);
             description = itemView.findViewById(R.id.textView_fullImageView_descriptions);
+
+
         }
     }
 
@@ -65,14 +68,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View listView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.row_view_feed_post, parent, false);
-
         return new MyViewHolder(listView);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        Feed feed = feedList.get(position);
+
+
+        final Feed feed = feedList.get(position);
+        final User userLogged = UserFirebase.getLoggedUserData();
 
         Uri uriPhotoUser     = Uri.parse( feed.getUserPhoto() );
         Uri uriPhotoPost    = Uri.parse( feed.getPhotoUrl() );
@@ -91,39 +96,54 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                User userLogged = UserFirebase.getLoggedUserData();
-
                 int totalLikes = 0;
-                if ( snapshot.hasChild("totalLikedPosts" ) ) {
+                if ( snapshot.hasChild("totalLiked" ) ) {
+
                     PostsLike postsLike =  snapshot.getValue( PostsLike.class );
-                    totalLikes = postsLike.getTotalLikes();
+                    assert postsLike != null;
+                    totalLikes = postsLike.getTotalLiked();
+
                 }
 
-                PostsLike liked = new PostsLike();
+                if ( snapshot.hasChild ( userLogged.getUID() ) ) {
+
+                    holder.likeButton.setLiked(true);
+
+                }else {
+                    holder.likeButton.setLiked(false);
+                }
+
+                final PostsLike liked = new PostsLike();
                 liked.setFeed( feed );
                 liked.setUser( userLogged );
-                liked.setTotalLikes( totalLikes );
+                liked.setTotalLiked( totalLikes );
 
                 holder.likeButton.setOnLikeListener(new OnLikeListener() {
                     @Override
                     public void liked(LikeButton likeButton) {
+                        // Log.i("likeButton", "liked");
                         liked.saveLikedPosts();
+                        holder.totalLikes.setText( liked.getTotalLiked() + constants.liked );
+
                     }
 
                     @Override
                     public void unLiked(LikeButton likeButton) {
-                        Log.i("likeButton", "unliked");
+                        //Log.i("likeButton", "unliked");
+                        liked.removedTotalLiked();
+                        holder.totalLikes.setText( liked.getTotalLiked() + constants.liked  );
+
                     }
                 });
 
-            }
+                holder.totalLikes.setText( liked.getTotalLiked() + constants.liked  );
 
+            }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
-
     }
 
     @Override

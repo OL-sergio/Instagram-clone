@@ -11,7 +11,7 @@ public class PostsLike {
     public Feed feed;
     public User user;
 
-    private int totalLikes = 0;
+    public int totalLiked = 0;
 
 
     public PostsLike() {
@@ -32,29 +32,44 @@ public class PostsLike {
                 .child( user.getUID() );
         postLiked.setValue( userData );
 
-
         updatedTotalLiked( 1);
     }
 
-    public void updatedTotalLiked( int value ) {
+
+    public void removedTotalLiked ( ){
+
+        DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
+
+        DatabaseReference postLiked = databaseReference
+                .child("liked-posts")
+                .child( feed.getId() )
+                .child( user.getUID() );
+        postLiked.removeValue();
+
+        updatedTotalLiked(-1 );
+
+    }
+
+
+    public void updatedTotalLiked( int value  ) {
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
 
         DatabaseReference postLiked = databaseReference
                 .child("liked-posts")
                 .child( feed.getId() )
                 .child( "totalLiked");
-        setTotalLikes( getTotalLikes( ) + value );
-        postLiked.setValue( getTotalLikes() );
+        setTotalLiked( getTotalLiked() + value );
+        postLiked.setValue( getTotalLiked() );
 
 
     }
 
-    public int getTotalLikes() {
-        return totalLikes;
+    public int getTotalLiked() {
+        return totalLiked;
     }
 
-    public void setTotalLikes(int totalLikes) {
-        this.totalLikes = totalLikes;
+    public void setTotalLiked(int totalLiked) {
+        this.totalLiked = totalLiked;
     }
 
     public Feed getFeed() {

@@ -35,7 +35,6 @@ public class Posts implements Serializable {
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference();
 
-
         //Post reference
         String combinationId = "/" + getIdUser() + "/" + getId();
         object.put( "/posts" + combinationId, this );

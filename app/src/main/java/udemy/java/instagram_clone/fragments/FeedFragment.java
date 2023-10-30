@@ -63,7 +63,6 @@ public class FeedFragment extends Fragment {
 
         recyclerViewFeed = binding.recyclerViewFeedFragment;
 
-
         feedAdapter = new FeedAdapter(feedList, getActivity());
         recyclerViewFeed.setHasFixedSize(true);
         recyclerViewFeed.setLayoutManager( new LinearLayoutManager(getActivity()));
@@ -78,6 +77,9 @@ public class FeedFragment extends Fragment {
         valueEventListenerPostFeed = databaseReferenceFeed.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                feedList.clear();
+
                 for ( DataSnapshot dataSnapshot: snapshot.getChildren() ) {
                    feedList.add( dataSnapshot.getValue(Feed.class) );
                 }
