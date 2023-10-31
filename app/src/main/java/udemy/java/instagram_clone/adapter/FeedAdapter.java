@@ -1,6 +1,7 @@
 package udemy.java.instagram_clone.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import udemy.java.instagram_clone.R;
+import udemy.java.instagram_clone.activity.CommentsActivity;
 import udemy.java.instagram_clone.config.ConfigurationFirebase;
 import udemy.java.instagram_clone.config.UserFirebase;
 import udemy.java.instagram_clone.helper.Constants;
@@ -87,6 +89,20 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedAdapter.MyViewHolder> 
 
         holder.nameProfile.setText( feed.getUserName() );
         holder.description.setText( feed.getPostDescription() );
+
+        holder.viewComment.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(context, CommentsActivity.class);
+                intent.putExtra("idPost", feed.getId());
+
+
+                context.startActivity(intent);
+
+            }
+        });
+
 
         //Retrieved the liked posts
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference()
