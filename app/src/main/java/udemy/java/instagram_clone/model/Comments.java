@@ -20,7 +20,7 @@ public class Comments {
 
 
         DatabaseReference databaseReference = ConfigurationFirebase.getDatabaseReference()
-                .child("Comments")
+                .child("comments")
                 .child(getIdPosts());
 
         String keyComments = databaseReference.push().getKey();
