@@ -1,6 +1,7 @@
 package udemy.java.instagram_clone.fragments;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -87,28 +88,9 @@ public class AccountFragment extends Fragment {
 
         startComponents();
 
-        getProfileImage();
+        startImageLoader();
 
         retrievingPhotosPosts();
-
-        startImageLoader();
-    }
-
-    private void getProfileImage() {
-
-        //Recover data from user
-        String urlPhoto = userLogged.getUrlPhoto();
-
-        if (urlPhoto != null ) {
-
-            Glide.with(AccountFragment.this)
-                    .asBitmap()
-                    .load(urlPhoto)
-                    .placeholder(R.drawable.avatar)
-                    .into(circleImageViewProfileImage);
-
-        }
-
 
         buttonActionProfile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -116,9 +98,28 @@ public class AccountFragment extends Fragment {
 
                 startActivity(new Intent(getContext(), EditProfileActivity.class));
 
-                getActivity().getFragmentManager().popBackStackImmediate();
+                requireActivity().getSupportFragmentManager().popBackStackImmediate();
             }
         });
+
+    }
+
+    private void getProfileImage() {
+
+        userLogged = UserFirebase.getLoggedUserData();
+        //Recover data from user
+        String urlPhoto = userLogged.getUrlPhoto();
+
+        if (urlPhoto != null ) {
+
+            Uri uri = Uri.parse(urlPhoto);
+
+            Glide.with(AccountFragment.this)
+                    .load(uri)
+                    .placeholder(R.drawable.avatar)
+                    .into(circleImageViewProfileImage);
+
+        }
 
 
     }
@@ -154,6 +155,7 @@ public class AccountFragment extends Fragment {
                 for ( DataSnapshot ds: snapshot.getChildren()  ){
                     Posts posts = ds.getValue(Posts.class);
                     //Log.d("post","urlPhoto" + posts.getPhotoUrl() );
+                    assert posts != null;
                     urlPhotos.add(posts.getPhotoUrl());
 
                 }
@@ -185,9 +187,9 @@ public class AccountFragment extends Fragment {
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                         User user = snapshot.getValue(User.class);
-
                         //String posts = String.valueOf( user.getPosts() );
 
+                        assert user != null;
                         String follow = String.valueOf( user.getTotalFollow() );
                         String followers = String.valueOf( user.getTotalFollowers() );
 
@@ -222,7 +224,9 @@ public class AccountFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-       retrievedCurrentUserLogged();
+        retrievedCurrentUserLogged();
+
+        getProfileImage();
 
     }
 
@@ -233,6 +237,9 @@ public class AccountFragment extends Fragment {
 
         binding = null;
         referenceUserLogged.removeEventListener(valueEventListenerUserProfile);
+
+        ImageLoader.getInstance().clearMemoryCache();
+        ImageLoader.getInstance().clearDiskCache();
 
     }
 }

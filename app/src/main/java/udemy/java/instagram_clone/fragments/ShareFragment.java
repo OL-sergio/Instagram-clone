@@ -2,9 +2,9 @@ package udemy.java.instagram_clone.fragments;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -23,6 +23,7 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 
 import udemy.java.instagram_clone.activity.FilterActivity;
 import udemy.java.instagram_clone.databinding.FragmentShareBinding;
@@ -84,6 +85,10 @@ public class ShareFragment extends Fragment {
         });
     }
 
+
+
+
+
     ActivityResultLauncher<Intent> insertFromGalleryActivityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             new ActivityResultCallback<ActivityResult>() {
@@ -93,13 +98,15 @@ public class ShareFragment extends Fragment {
 
                   if( result.getResultCode() == Activity.RESULT_OK && result.getData() != null ) {
 
-
-                      Uri url = result.getData().getData();
-
                      try {
 
-                         ContentResolver contentResolver = requireActivity().getContentResolver();
-                         image = MediaStore.Images.Media.getBitmap( contentResolver, url);
+                         Uri selectedImageUri = result.getData().getData();
+
+
+                         assert selectedImageUri != null;
+                         InputStream inputStream = requireActivity().getContentResolver().openInputStream(selectedImageUri);
+                         image = BitmapFactory.decodeStream(inputStream);
+
 
                          ByteArrayOutputStream dataOutput = new ByteArrayOutputStream();
                          image.compress(Bitmap.CompressFormat.JPEG, 15, dataOutput);

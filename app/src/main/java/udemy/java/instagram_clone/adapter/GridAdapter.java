@@ -70,7 +70,6 @@ public class GridAdapter extends ArrayAdapter<String> {
 
             @Override
             public void onLoadingStarted(String imageUri, View view) {
-
                 viewHolder.progressBar.setVisibility( View.VISIBLE );
 
             }
@@ -99,4 +98,6 @@ public class GridAdapter extends ArrayAdapter<String> {
 
         return convertView;
     }
+
+
 }

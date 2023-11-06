@@ -112,7 +112,7 @@ public class EditProfileActivity extends AppCompatActivity {
         buttonSaveUpdateUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String nameUpdated = textInputEditTextUpdateName.getText().toString();
+                String nameUpdated = Objects.requireNonNull(textInputEditTextUpdateName.getText()).toString();
 
                 UserFirebase.updateUserName(nameUpdated);
 

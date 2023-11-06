@@ -35,12 +35,19 @@ public class User implements Serializable {
     public void updateUser(){
 
         DatabaseReference firebaseReference = ConfigurationFirebase.getDatabaseReference();
-        DatabaseReference usersReference = firebaseReference
+       /* DatabaseReference usersReference = firebaseReference
                 .child("users")
-                .child(getUID());
+                .child(getUID());*/
 
-        Map<String, Object> userValues = convertToMAp();
-        usersReference.updateChildren(userValues);
+
+        Map <String, Object> updateUsersChild = new HashMap<>();
+        updateUsersChild.put("/users/" + getUID() + "/name", getName() );
+        updateUsersChild.put("/users/" + getUID() + "/urlPhoto", getUrlPhoto() );
+
+        firebaseReference.updateChildren( updateUsersChild );
+
+        /*Map<String, Object> userValues = convertToMAp();
+        usersReference.updateChildren(userValues);*/
 
     }
     public void updateTotalPost(){
@@ -64,7 +71,7 @@ public class User implements Serializable {
         userMap.put("name", getName());
         userMap.put("uid", getUID());
         userMap.put("urlPhoto", getUrlPhoto());
-        //userMap.put("totalFollowers", getTotalFollowers());
+       //userMap.put("totalFollowers", getTotalFollowers());
         //userMap.put("totalFollow", getTotalFollow());
         //userMap.put("totalPosts", getTotalPosts());
 
